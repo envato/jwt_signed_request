@@ -170,7 +170,7 @@ We welcome contribution from everyone. Read more about it in
 
 For bug fixes, documentation changes, and small features:
 
-1. Fork it ( https://github.com/[my-github-username]/jwt_signed_request/fork )
+1. Fork it ( https://github.com/envato/jwt_signed_request/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
