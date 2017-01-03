@@ -264,6 +264,11 @@ RSpec.describe JWTSignedRequest do
           expect(JWT).to have_received(:decode).with(jwt_token, secret_key, 'HS256')
         end
       end
+
+      it 'allows the body to be read' do
+        verify_request
+        expect(request.body.read).to eq 'data=body'
+      end
     end
   end
 end
