@@ -4,7 +4,7 @@ require 'jwt_signed_request'
 module JWTSignedRequest
   module Middlewares
     class Rack
-      UNAUTHORIZED_STATUS_CODE = 401.freeze
+      UNAUTHORIZED_STATUS_CODE = 401
 
       def initialize(app, options = {})
         @app = app
