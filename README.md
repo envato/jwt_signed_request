@@ -86,7 +86,7 @@ AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
 conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
   faraday.use JWTSignedRequest::Middlewares::Faraday,
     secret_key: OpenSSL::PKey::EC.new(private_key),
-    algorithm: 'EC256',                     # optional (default: ES256)
+    algorithm: 'ES256',                     # optional (default: ES256)
     key_id: 'my-key-id',                    # optional
     issuer: 'my-issuer',                    # optional
     additional_headers_to_sign: ['X-AUTH']  # optional
