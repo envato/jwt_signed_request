@@ -32,7 +32,7 @@ module JWTSignedRequest
     )
   end
 
-  def self.verify(request:, secret_key:, algorithm: nil)
+  def self.verify(request:, secret_key:, algorithm: nil, leeway: 0)
     # algorithm is deprecated and will be removed in future
     jwt_token = Headers.fetch('Authorization', request)
 
