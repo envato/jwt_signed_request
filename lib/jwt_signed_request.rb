@@ -42,6 +42,9 @@ module JWTSignedRequest
     end
 
     begin
+      #TODO Once JWT v2.0.0 has been released, we should upgrade to it and start using `exp_leeway` instead
+      # 'leeway' will still work, but 'exp_leeway' is more explicit and is the documented way to do it.
+      # see https://github.com/jwt/ruby-jwt/pull/187
       claims = JWT.decode(jwt_token, secret_key, verify, {leeway: leeway.to_i})[0]
       unless verified_request?(request: request, claims: claims)
         raise RequestVerificationFailedError, "Request failed verification"
