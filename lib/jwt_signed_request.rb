@@ -33,15 +33,15 @@ module JWTSignedRequest
   end
 
   def self.verify(request:, secret_key:, algorithm: nil)
+    # algorithm is deprecated and will be removed in future
     jwt_token = Headers.fetch('Authorization', request)
-    algorithm ||= DEFAULT_ALGORITHM
 
     if jwt_token.nil?
       raise MissingAuthorizationHeaderError, "Missing Authorization header in the request"
     end
 
     begin
-      claims = JWT.decode(jwt_token, secret_key, algorithm)[0]
+      claims = JWT.decode(jwt_token, secret_key)[0]
       unless verified_request?(request: request, claims: claims)
         raise RequestVerificationFailedError, "Request failed verification"
       end
