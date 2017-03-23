@@ -11,7 +11,11 @@ module JWTSignedRequest
   JWTDecodeError = Class.new(UnauthorizedRequestError)
   RequestVerificationFailedError = Class.new(UnauthorizedRequestError)
 
-  def self.sign(method:, path:, body: EMPTY_BODY, headers:, secret_key:, algorithm: DEFAULT_ALGORITHM, key_id: nil, issuer: nil, additional_headers_to_sign: Claims::EMPTY_HEADERS)
+  def self.sign(method:, path:,
+                body: EMPTY_BODY, headers:,
+                secret_key:, algorithm: DEFAULT_ALGORITHM,
+                key_id: nil, issuer: nil,
+                additional_headers_to_sign: Claims::EMPTY_HEADERS)
     additional_jwt_headers = key_id ? {kid: key_id} : {}
     JWT.encode(
       Claims.generate(
