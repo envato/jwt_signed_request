@@ -34,6 +34,7 @@ module JWTSignedRequest
 
   def self.verify(request:, secret_key:, algorithm: nil, leeway: 0)
     # algorithm is deprecated and will be removed in future
+    verify = true
     jwt_token = Headers.fetch('Authorization', request)
 
     if jwt_token.nil?
@@ -41,7 +42,7 @@ module JWTSignedRequest
     end
 
     begin
-      claims = JWT.decode(jwt_token, secret_key)[0]
+      claims = JWT.decode(jwt_token, secret_key, verify, {leeway: leeway.to_i})[0]
       unless verified_request?(request: request, claims: claims)
         raise RequestVerificationFailedError, "Request failed verification"
       end
