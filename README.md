@@ -136,6 +136,14 @@ exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
 end
 ```
 
+### Increasing Expiry leeway
+
+JWT tokens contain an expiry timestamp. If communication delays are large (or system clocks are sufficiently out of synch), you may need to increase the 'leeway' when verifying. For example:
+
+```ruby
+  JWTSignedRequest.verify(request: request, secret_key: 'my_public_key', leeway: 55)
+```
+
 ## Using Rack Middleware
 
 ```ruby
