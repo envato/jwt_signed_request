@@ -265,6 +265,17 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
+      context 'and expiry leeway is not provided' do
+        subject(:verify_request) do
+          described_class.verify(request: request, secret_key: secret_key)
+        end
+
+        it 'does not pass the leeway with options' do
+          verify_request
+          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, {})
+        end
+      end
+
       it 'allows the body to be read' do
         verify_request
         expect(request.body.read).to eq 'data=body'
