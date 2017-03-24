@@ -11,7 +11,11 @@ module JWTSignedRequest
   JWTDecodeError = Class.new(UnauthorizedRequestError)
   RequestVerificationFailedError = Class.new(UnauthorizedRequestError)
 
-  def self.sign(method:, path:, body: EMPTY_BODY, headers:, secret_key:, algorithm: DEFAULT_ALGORITHM, key_id: nil, issuer: nil, additional_headers_to_sign: Claims::EMPTY_HEADERS)
+  def self.sign(method:, path:,
+                body: EMPTY_BODY, headers:,
+                secret_key:, algorithm: DEFAULT_ALGORITHM,
+                key_id: nil, issuer: nil,
+                additional_headers_to_sign: Claims::EMPTY_HEADERS)
     additional_jwt_headers = key_id ? {kid: key_id} : {}
     JWT.encode(
       Claims.generate(
@@ -28,16 +32,24 @@ module JWTSignedRequest
     )
   end
 
-  def self.verify(request:, secret_key:, algorithm: nil)
+  def self.verify(request:, secret_key:, algorithm: nil, leeway: nil)
+    # TODO: algorithm is deprecated and will be removed in future
+    verify = true
+    options = {}
+    if leeway
+      # TODO: Once JWT v2.0.0 has been released, we should upgrade to it and start using `exp_leeway` instead
+      #  'leeway' will still work, but 'exp_leeway' is more explicit and is the documented way to do it.
+      #  see https://github.com/jwt/ruby-jwt/pull/187
+      options[:leeway] = leeway.to_i
+    end
     jwt_token = Headers.fetch('Authorization', request)
-    algorithm ||= DEFAULT_ALGORITHM
 
     if jwt_token.nil?
       raise MissingAuthorizationHeaderError, "Missing Authorization header in the request"
     end
 
     begin
-      claims = JWT.decode(jwt_token, secret_key, algorithm)[0]
+      claims = JWT.decode(jwt_token, secret_key, verify, options)[0]
       unless verified_request?(request: request, claims: claims)
         raise RequestVerificationFailedError, "Request failed verification"
       end

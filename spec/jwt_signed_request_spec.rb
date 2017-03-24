@@ -254,14 +254,25 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
-      context 'and the algorithm is explicit' do
+      context 'and expiry leeway is provided' do
         subject(:verify_request) do
-          described_class.verify(request: request, secret_key: secret_key, algorithm: 'HS256')
+          described_class.verify(request: request, secret_key: secret_key, leeway: 123)
         end
 
-        it 'uses the specified algorithm' do
+        it 'uses the specified leeway' do
           verify_request
-          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, 'HS256')
+          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, leeway: 123)
+        end
+      end
+
+      context 'and expiry leeway is not provided' do
+        subject(:verify_request) do
+          described_class.verify(request: request, secret_key: secret_key)
+        end
+
+        it 'does not pass the leeway with options' do
+          verify_request
+          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, {})
         end
       end
 
