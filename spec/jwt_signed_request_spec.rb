@@ -261,7 +261,7 @@ RSpec.describe JWTSignedRequest do
 
         it 'uses the specified leeway' do
           verify_request
-          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, {leeway:123})
+          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, leeway: 123)
         end
       end
 
