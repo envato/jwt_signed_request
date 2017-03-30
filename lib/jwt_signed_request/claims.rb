@@ -18,6 +18,7 @@ module JWTSignedRequest
       @additional_headers_to_sign = additional_headers_to_sign
       @timeout = timeout
       @issuer = issuer
+      @include_exp = false # TODO: allow this to be configured
     end
 
     private_class_method :new
@@ -28,8 +29,8 @@ module JWTSignedRequest
         path: path,
         headers: serialized_headers,
         body_sha: body_sha,
-        exp: (Time.now + timeout).to_i
       }
+      result[:exp] = (Time.now + timeout).to_i if @include_exp
       result[:iss] = issuer if issuer
       result
     end
