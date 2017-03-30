@@ -59,11 +59,10 @@ RSpec.describe JWTSignedRequest::Claims do
       expect(valid_json?(headers)).to eq(true)
     end
 
-    it 'includes an expiration time claim 30 seconds from now' do
+    it 'does not include an expiration time claim' do
       request_time = Time.parse("2016-06-02T13:20:30Z")
-      expiry_time = Time.parse("2016-06-02T13:21:00Z")
       Timecop.freeze(request_time) do
-        expect(claims).to include(exp: 1464873660)
+        expect(claims.keys).to_not include(:exp)
       end
     end
 

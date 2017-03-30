@@ -30,14 +30,14 @@ module JWTSignedRequest
         headers: serialized_headers,
         body_sha: body_sha,
       }
-      result[:exp] = (Time.now + timeout).to_i if @include_exp
+      result[:exp] = (Time.now + timeout).to_i if include_exp
       result[:iss] = issuer if issuer
       result
     end
 
     private
 
-    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :timeout, :issuer
+    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :timeout, :issuer, :include_exp
 
     HEADERS_TO_SIGN = %w(
       Content-Type
