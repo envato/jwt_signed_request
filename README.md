@@ -155,7 +155,7 @@ exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
 """
 
 class Server < Sinatra::Base
-  use JWTSignedRequest::Middlewares::Rack
+  use JWTSignedRequest::Middlewares::Rack,
      secret_key: OpenSSL::PKey::EC.new(PUBLIC_KEY)
  end
 ```
