@@ -10,15 +10,18 @@ module JWTSignedRequest
         @app = app
         @secret_key = options.fetch(:secret_key)
         @algorithm = options[:algorithm]
+        @exclude_paths = options[:exclude_paths]
       end
 
       def call(env)
         begin
-          ::JWTSignedRequest.verify(
-            request: ::Rack::Request.new(env),
-            secret_key: secret_key,
-            algorithm: algorithm
-          )
+          unless excluded_path?(env)
+            ::JWTSignedRequest.verify(
+              request: ::Rack::Request.new(env),
+              secret_key: secret_key,
+              algorithm: algorithm
+            )
+          end
 
           app.call(env)
         rescue ::JWTSignedRequest::UnauthorizedRequestError => e
@@ -28,7 +31,12 @@ module JWTSignedRequest
 
       private
 
-      attr_reader :app, :secret_key, :algorithm
+      attr_reader :app, :secret_key, :algorithm, :exclude_paths
+
+      def excluded_path?(env)
+        !exclude_paths.nil? &&
+          env['REQUEST_PATH'].match(exclude_paths)
+      end
     end
   end
 end

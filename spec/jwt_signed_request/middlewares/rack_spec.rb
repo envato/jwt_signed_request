@@ -30,4 +30,40 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
       expect(code).to eq(200)
     end
   end
+
+  context 'when exclude_paths options is defined' do
+    let :middleware do
+      JWTSignedRequest::Middlewares::Rack.new(app, secret_key: 'secret', exclude_paths: /api|health/)
+    end
+
+    before do
+      allow(JWTSignedRequest).to receive(:verify)
+    end
+
+    context 'and request path is not excluded' do
+      let(:env) do
+        {
+          'REQUEST_PATH' => '/verify'
+        }
+      end
+
+      it 'verifies the request' do
+        code, header, body = verify_request
+        expect(JWTSignedRequest).to have_received(:verify)
+      end
+    end
+
+    context 'and request path is excluded' do
+      let(:env) do
+        {
+          'REQUEST_PATH' => '/health'
+        }
+      end
+
+      it 'does not verify the request' do
+        code, header, body = verify_request
+        expect(JWTSignedRequest).not_to have_received(:verify)
+      end
+    end
+  end
 end
