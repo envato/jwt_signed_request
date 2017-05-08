@@ -46,7 +46,16 @@ RSpec.describe "Integration test" do
     end
 
     it 'receives an unauthorized status code' do
-      get '/'
+      jwt_token = JWTSignedRequest.sign(
+        method: 'GET',
+        path: '/',
+        body: '',
+        headers: {'Content-Type' => 'application/json'},
+        secret_key: OpenSSL::PKey::EC.new(private_key),
+        algorithm: 'ES256'
+      )
+
+      get '/', '', { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
       expect(last_response.status).to eq(401)
     end
   end
