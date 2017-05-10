@@ -230,6 +230,14 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
+      context 'and there is no request method in the claims' do
+        let(:method) { nil }
+
+        it 'raises a RequestVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        end
+      end
+
       context 'and the request path is different' do
         let(:path) { '/api/different/endpoint'}
 

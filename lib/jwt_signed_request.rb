@@ -60,7 +60,7 @@ module JWTSignedRequest
   end
 
   def self.verified_request?(request:, claims:)
-    claims['method'].downcase == request.request_method.downcase &&
+    claims['method'].to_s.downcase == request.request_method.downcase &&
       claims['path'] == request.fullpath &&
       claims['body_sha'] == Digest::SHA256.hexdigest(request_body(request: request)) &&
       verified_headers?(request: request, claims: claims)
