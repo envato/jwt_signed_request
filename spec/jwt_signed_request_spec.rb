@@ -254,7 +254,7 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
-      context 'and the request headers is different' do
+      context 'and the request headers are different' do
         let(:headers) { { 'content-type' => 'application/xml' } }
 
         it 'raises a RequestVerificationFailedError' do
