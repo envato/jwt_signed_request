@@ -262,6 +262,14 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
+      context 'and there are no headers in the claims' do
+        let(:headers) { nil }
+
+        it 'does not raise an error' do
+          expect { verify_request }.to_not raise_error
+        end
+      end
+
       context 'and expiry leeway is provided' do
         subject(:verify_request) do
           described_class.verify(request: request, secret_key: secret_key, leeway: 123)

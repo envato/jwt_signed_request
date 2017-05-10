@@ -77,7 +77,11 @@ module JWTSignedRequest
   private_class_method :request_body
 
   def self.verified_headers?(request:, claims:)
-    parsed_headers = JSON.parse(claims['headers'])
+    parsed_headers = begin
+      JSON.parse(claims['headers'])
+    rescue JSON::ParserError
+      {}
+    end
 
     parsed_headers.all? do |header_key, header_value|
       Headers.fetch(header_key, request) == header_value
