@@ -54,7 +54,7 @@ module JWTSignedRequest
           path: path,
           headers: headers,
           body: body,
-          additional_headers_to_sign: [],
+          additional_headers_to_sign: nil,
           issuer: nil
         )
       end
@@ -133,7 +133,7 @@ module JWTSignedRequest
         path: path,
         headers: headers,
         body: body,
-        additional_headers_to_sign: [],
+        additional_headers_to_sign: nil,
         issuer: 'the-issuer'
       )
     end

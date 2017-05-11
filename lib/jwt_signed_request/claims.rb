@@ -4,19 +4,18 @@ require 'rack/utils'
 
 module JWTSignedRequest
   class Claims
-    EMPTY_HEADERS = [].freeze
-
     def self.generate(args)
       new(**args).generate
     end
 
-    def initialize(method:, path:, headers:, body:, additional_headers_to_sign: EMPTY_HEADERS, timeout: DEFAULT_TIMEOUT, issuer:)
+    # TODO: Timeout can't be set from the public API
+    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, timeout: nil, issuer:)
       @method = method
       @path = path
-      @headers = headers
+      @headers = headers || EMPTY_HEADERS
       @body = body
-      @additional_headers_to_sign = additional_headers_to_sign
-      @timeout = timeout
+      @additional_headers_to_sign = additional_headers_to_sign || EMPTY_HEADERS
+      @timeout = timeout || DEFAULT_TIMEOUT
       @issuer = issuer
     end
 
@@ -50,6 +49,10 @@ module JWTSignedRequest
     DEFAULT_TIMEOUT = 30.freeze
 
     private_constant :DEFAULT_TIMEOUT
+
+    EMPTY_HEADERS = [].freeze
+
+    private_constant :EMPTY_HEADERS
 
     def formatted_body
       case body

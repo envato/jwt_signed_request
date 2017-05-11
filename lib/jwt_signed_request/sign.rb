@@ -15,7 +15,7 @@ module JWTSignedRequest
       algorithm: DEFAULT_ALGORITHM,
       key_id: nil,
       issuer: nil,
-      additional_headers_to_sign: Claims::EMPTY_HEADERS
+      additional_headers_to_sign: nil
     )
       @method = method
       @path = path

@@ -86,7 +86,8 @@ RSpec.describe JWTSignedRequest::Claims do
           path: path,
           headers: headers,
           body: body,
-          issuer: nil
+          issuer: nil,
+          additional_headers_to_sign: nil,
         )
       end
 
