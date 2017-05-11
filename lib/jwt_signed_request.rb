@@ -78,7 +78,7 @@ module JWTSignedRequest
 
   def self.verified_headers?(request:, claims:)
     parsed_headers = begin
-      JSON.parse(claims['headers'])
+      JSON.parse(claims['headers'].to_s)
     rescue JSON::ParserError
       {}
     end
