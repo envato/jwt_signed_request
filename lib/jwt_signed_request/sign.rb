@@ -29,24 +29,28 @@ module JWTSignedRequest
     end
 
     def call
-      additional_jwt_headers = key_id ? {kid: key_id} : {}
-      JWT.encode(
-        Claims.generate(
-          method: method,
-          path: path,
-          headers: headers,
-          body: body,
-          additional_headers_to_sign: additional_headers_to_sign,
-          issuer: issuer
-        ),
-        secret_key,
-        algorithm,
-        additional_jwt_headers
-      )
+      JWT.encode(claims, secret_key, algorithm, additional_jwt_headers)
     end
+
+    private
 
     attr_reader \
       :method, :path, :body, :headers, :secret_key, :algorithm,
       :key_id, :issuer, :additional_headers_to_sign
+
+    def additional_jwt_headers
+      key_id ? {kid: key_id} : {}
+    end
+
+    def claims
+      Claims.generate(
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        additional_headers_to_sign: additional_headers_to_sign,
+        issuer: issuer
+      )
+    end
   end
 end
