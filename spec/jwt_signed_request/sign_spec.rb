@@ -1,4 +1,4 @@
-require 'jwt_signed_request/sign'
+require 'jwt_signed_request'
 
 module JWTSignedRequest
   RSpec.describe Sign do

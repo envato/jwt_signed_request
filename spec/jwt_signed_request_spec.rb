@@ -1,7 +1,4 @@
 require 'jwt_signed_request'
-require 'openssl'
-require 'securerandom'
-require 'rack'
 
 RSpec.describe JWTSignedRequest do
   describe '.sign' do

@@ -1,4 +1,5 @@
-require 'jwt_signed_request/verify'
+require 'jwt_signed_request'
+require 'rack'
 
 module JWTSignedRequest
   RSpec.describe Verify do
