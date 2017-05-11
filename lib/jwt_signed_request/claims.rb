@@ -8,14 +8,12 @@ module JWTSignedRequest
       new(**args).generate
     end
 
-    # TODO: Timeout can't be set from the public API
-    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, timeout: nil, issuer:)
+    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, issuer:)
       @method = method
       @path = path
       @headers = headers || EMPTY_HEADERS
       @body = body
       @additional_headers_to_sign = additional_headers_to_sign || EMPTY_HEADERS
-      @timeout = timeout || DEFAULT_TIMEOUT
       @issuer = issuer
     end
 
@@ -35,7 +33,7 @@ module JWTSignedRequest
 
     private
 
-    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :timeout, :issuer
+    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :issuer
 
     HEADERS_TO_SIGN = %w(
       Content-Type
@@ -53,6 +51,10 @@ module JWTSignedRequest
     EMPTY_HEADERS = [].freeze
 
     private_constant :EMPTY_HEADERS
+
+    def timeout
+      DEFAULT_TIMEOUT
+    end
 
     def formatted_body
       case body
