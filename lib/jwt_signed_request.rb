@@ -60,7 +60,7 @@ module JWTSignedRequest
   end
 
   def self.verified_request?(request:, claims:)
-    claims['method'].downcase == request.request_method.downcase &&
+    claims['method'].to_s.downcase == request.request_method.downcase &&
       claims['path'] == request.fullpath &&
       claims['body_sha'] == Digest::SHA256.hexdigest(request_body(request: request)) &&
       verified_headers?(request: request, claims: claims)
@@ -77,7 +77,11 @@ module JWTSignedRequest
   private_class_method :request_body
 
   def self.verified_headers?(request:, claims:)
-    parsed_headers = JSON.parse(claims['headers'])
+    parsed_headers = begin
+      JSON.parse(claims['headers'].to_s)
+    rescue JSON::ParserError
+      {}
+    end
 
     parsed_headers.all? do |header_key, header_value|
       Headers.fetch(header_key, request) == header_value

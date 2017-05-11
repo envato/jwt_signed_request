@@ -186,7 +186,7 @@ RSpec.describe JWTSignedRequest do
     let(:path) { request_env['REQUEST_PATH'] }
     let(:body) { request_env['rack.input'] }
     let(:body_sha) { Digest::SHA256.hexdigest(body.string) }
-    let(:headers) { { 'content-type' => 'application/json' } }
+    let(:headers) { JSON.dump('content-type' => 'application/json') }
 
     subject(:verify_request) do
       described_class.verify(request: request, secret_key: secret_key)
@@ -208,7 +208,7 @@ RSpec.describe JWTSignedRequest do
           'method' => method,
           'path' => path,
           'body_sha' => body_sha,
-          'headers' => JSON.dump(headers)
+          'headers' => headers,
         }]
       end
 
@@ -224,6 +224,14 @@ RSpec.describe JWTSignedRequest do
 
       context 'and the request method is different' do
         let(:method) { 'GET' }
+
+        it 'raises a RequestVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        end
+      end
+
+      context 'and there is no request method in the claims' do
+        let(:method) { nil }
 
         it 'raises a RequestVerificationFailedError' do
           expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
@@ -246,11 +254,27 @@ RSpec.describe JWTSignedRequest do
         end
       end
 
-      context 'and the request headers is different' do
-        let(:headers) { { 'content-type' => 'application/xml' } }
+      context 'and the request headers are different' do
+        let(:headers) { JSON.dump('content-type' => 'application/xml') }
 
         it 'raises a RequestVerificationFailedError' do
           expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        end
+      end
+
+      context 'and there are no headers in the claims' do
+        let(:headers) { nil }
+
+        it 'does not raise an error' do
+          expect { verify_request }.to_not raise_error
+        end
+      end
+
+      context 'and the headers are invalid JSON in the claim' do
+        let(:headers) { 'invalid' }
+
+        it 'does not raise an error' do
+          expect { verify_request }.to_not raise_error
         end
       end
 
