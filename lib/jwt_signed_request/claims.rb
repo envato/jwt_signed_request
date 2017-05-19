@@ -4,19 +4,16 @@ require 'rack/utils'
 
 module JWTSignedRequest
   class Claims
-    EMPTY_HEADERS = [].freeze
-
     def self.generate(args)
       new(**args).generate
     end
 
-    def initialize(method:, path:, headers:, body:, additional_headers_to_sign: EMPTY_HEADERS, timeout: DEFAULT_TIMEOUT, issuer:)
+    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, issuer:)
       @method = method
       @path = path
-      @headers = headers
+      @headers = headers || EMPTY_HEADERS
       @body = body
-      @additional_headers_to_sign = additional_headers_to_sign
-      @timeout = timeout
+      @additional_headers_to_sign = additional_headers_to_sign || EMPTY_HEADERS
       @issuer = issuer
     end
 
@@ -36,7 +33,7 @@ module JWTSignedRequest
 
     private
 
-    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :timeout, :issuer
+    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :issuer
 
     HEADERS_TO_SIGN = %w(
       Content-Type
@@ -50,6 +47,14 @@ module JWTSignedRequest
     DEFAULT_TIMEOUT = 30.freeze
 
     private_constant :DEFAULT_TIMEOUT
+
+    EMPTY_HEADERS = [].freeze
+
+    private_constant :EMPTY_HEADERS
+
+    def timeout
+      DEFAULT_TIMEOUT
+    end
 
     def formatted_body
       case body
