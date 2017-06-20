@@ -15,7 +15,6 @@ module JWTSignedRequest
           path:       env[:url].request_uri,
           headers:    env[:request_headers],
           body:       env.fetch(:body, ::JWTSignedRequest::EMPTY_BODY),
-          secret_key: options[:secret_key],
           **optional_settings
         )
 
@@ -29,6 +28,7 @@ module JWTSignedRequest
 
       def optional_settings
         {
+          secret_key:                 options[:secret_key],
           algorithm:                  options[:algorithm],
           additional_headers_to_sign: options[:additional_headers_to_sign],
           key_id:                     options[:key_id],

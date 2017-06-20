@@ -11,8 +11,8 @@ module JWTSignedRequest
       path:,
       body: EMPTY_BODY,
       headers:,
-      secret_key:,
-      algorithm: DEFAULT_ALGORITHM,
+      secret_key: nil,
+      algorithm: nil,
       key_id: nil,
       issuer: nil,
       additional_headers_to_sign: nil
@@ -35,8 +35,20 @@ module JWTSignedRequest
     private
 
     attr_reader \
-      :method, :path, :body, :headers, :secret_key, :algorithm,
+      :method, :path, :body, :headers,
       :key_id, :issuer, :additional_headers_to_sign
+
+    def stored_key
+      @stored_key ||= JWTSignedRequest.key_store.get_signing_key(key_id: key_id)
+    end
+
+    def secret_key
+      @secret_key ||= stored_key.fetch(:key) { raise MissingKeyIdError }
+    end
+
+    def algorithm
+      @algorithm ||= stored_key.fetch(:algorithm, DEFAULT_ALGORITHM)
+    end
 
     def additional_jwt_headers
       key_id ? {kid: key_id} : {}
