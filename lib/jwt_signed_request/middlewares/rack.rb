@@ -8,7 +8,7 @@ module JWTSignedRequest
 
       def initialize(app, options = {})
         @app = app
-        @secret_key = options.fetch(:secret_key)
+        @secret_key = options[:secret_key]
         @algorithm = options[:algorithm]
         @exclude_paths = options[:exclude_paths]
       end
@@ -16,11 +16,13 @@ module JWTSignedRequest
       def call(env)
         begin
           unless excluded_path?(env)
-            ::JWTSignedRequest.verify(
+            args = {
               request: ::Rack::Request.new(env),
               secret_key: secret_key,
               algorithm: algorithm
-            )
+            }.reject { |_, value| value.nil? }
+
+            ::JWTSignedRequest.verify(**args)
           end
 
           app.call(env)

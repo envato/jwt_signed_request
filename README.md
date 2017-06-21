@@ -28,9 +28,46 @@ $ openssl ec -in myprivatekey.pem -pubout -out mypubkey.pem
 
 Store and encrypt these in your application secrets.
 
+## Configuration
+
+You can add signing and verification keys to the key store as your application needs them.
+
+```ruby
+private_key = <<-pem.gsub(/^\s+/, "")
+    -----BEGIN EC PRIVATE KEY-----
+    MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
+    AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
+    3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
+    -----END EC PRIVATE KEY-----
+  pem
+
+public_key = <<-pem.gsub(/^\s+/, "")
+  -----BEGIN PUBLIC KEY-----
+  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/O
+  exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
+  -----END PUBLIC KEY-----
+pem
+
+require 'openssl'
+
+JWTSignedRequest.configure_keys do |config|
+  config.add_signing_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(private_key),
+    algorithm: 'ES256',
+  )
+
+  config.add_verification_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(public_key),
+    algorithm: 'ES256',
+  )
+end
+```
+
 ## Signing Requests
 
-If you are using an asymmetrical encryption algorithm such as ES256 you will sign your requests using the private key.
+If you have added your signing keys to the key store, you will only need to specify the `key_id` you are signing the requests with.
 
 ### Using net/http
 
@@ -40,14 +77,6 @@ require 'uri'
 require 'openssl'
 require 'jwt_signed_request'
 
-private_key = """
------BEGIN EC PRIVATE KEY-----
-MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
-AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
-3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
------END EC PRIVATE KEY-----
-"""
-
 uri = URI('http://example.com')
 req = Net::HTTP::Get.new(uri)
 
@@ -56,9 +85,7 @@ req['Authorization'] = JWTSignedRequest.sign(
   path: req.path,
   headers: {"Content-Type" => "application/json"},
   body: "",
-  secret_key: OpenSSL::PKey::EC.new(private_key),
-  algorithm: 'ES256',                     # optional (default: ES256)
-  key_id: 'my-key-id',                    # optional
+  key_id: 'my-key-id',
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )
@@ -75,19 +102,9 @@ require 'faraday'
 require 'openssl'
 require 'jwt_signed_request/middlewares/faraday'
 
-private_key = """
------BEGIN EC PRIVATE KEY-----
-MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
-AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
-3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
------END EC PRIVATE KEY-----
-"""
-
 conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
   faraday.use JWTSignedRequest::Middlewares::Faraday,
-    secret_key: OpenSSL::PKey::EC.new(private_key),
-    algorithm: 'ES256',                     # optional (default: ES256)
-    key_id: 'my-key-id',                    # optional
+    key_id: 'my-key-id',
     issuer: 'my-issuer',                    # optional
     additional_headers_to_sign: ['X-AUTH']  # optional
 
@@ -102,19 +119,13 @@ end
 
 ## Verifying Requests
 
-If you are using an asymmetrical encryption algorithm such as ES256 you will verify the request using the public key.
+Please make sure you have added your verification keys to the key store. Doing so will allow the server to verify requests signed by different signing keys.
+
 
 ## Using Rails
 
 ```ruby
 class APIController < ApplicationController
-  PUBLIC_KEY = """
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/O
-exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
------END PUBLIC KEY-----
-  """
-
   before_action :verify_request
 
   ...
@@ -123,10 +134,7 @@ exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
 
   def verify_request
     begin
-      JWTSignedRequest.verify(
-        request: request,
-        secret_key: OpenSSL::PKey::EC.new(PUBLIC_KEY)
-      )
+      JWTSignedRequest.verify(request: request)
 
     rescue JWTSignedRequest::UnauthorizedRequestError => e
       render :json => {}, :status => :unauthorized
@@ -141,25 +149,23 @@ end
 JWT tokens contain an expiry timestamp. If communication delays are large (or system clocks are sufficiently out of synch), you may need to increase the 'leeway' when verifying. For example:
 
 ```ruby
-  JWTSignedRequest.verify(request: request, secret_key: 'my_public_key', leeway: 55)
+  JWTSignedRequest.verify(request: request, leeway: 55)
 ```
 
 ## Using Rack Middleware
 
 ```ruby
-PUBLIC_KEY = """
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/O
-exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
------END PUBLIC KEY-----
-"""
-
 class Server < Sinatra::Base
   use JWTSignedRequest::Middlewares::Rack,
-     secret_key: OpenSSL::PKey::EC.new(PUBLIC_KEY),
      exclude_paths: /public|health/              # optional regex
  end
 ```
+
+## Backwards Compability
+
+Please note that the way we sign and verify requests has changed in version 2.x.x. For documentation on how to use older versions please look [here](https://github.com/envato/jwt_signed_request/blob/master/VERSION_1.md).
+
+We are only supporting the old API for the next couple of releases of version 2.x.x so please upgrade ASAP.
 
 ## Maintainers
 - [Toan Nguyen](https://github.com/yoshdog)

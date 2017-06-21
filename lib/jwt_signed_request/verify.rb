@@ -6,8 +6,9 @@ module JWTSignedRequest
       new(*args).call
     end
 
-    # TODO: algorithm is deprecated and will be removed in future
-    def initialize(request:, secret_key:, algorithm: nil, leeway: nil)
+    # TODO: secret_key & algorithm is deprecated and will be removed in future.
+    # For now we will support its functionaility
+    def initialize(request:, secret_key: nil, algorithm: nil, leeway: nil)
       @request = request
       @secret_key = secret_key
       @algorithm = algorithm
@@ -26,7 +27,22 @@ module JWTSignedRequest
 
     private
 
-    attr_reader :request, :secret_key, :algorithm, :leeway
+    attr_reader :request, :leeway
+
+    def stored_key
+      jwt_header, _, _, _ = ::JWT.decoded_segments(jwt_token, false)
+      key_id = jwt_header.fetch('kid') { raise MissingKeyIdError }
+      signed_algorithm = jwt_header.fetch('alg')
+      JWTSignedRequest.key_store.get_verification_key(key_id: key_id).tap do |key|
+        if signed_algorithm != key[:algorithm]
+          raise AlgorithmMismatchError
+        end
+      end
+    end
+
+    def secret_key
+      @secret_key ||= stored_key.fetch(:key) { raise MissingKeyIdError }
+    end
 
     def jwt_token
       @jwt_token ||= Headers.fetch('Authorization', request)
