@@ -47,7 +47,7 @@ RSpec.describe "Integration test" do
     end
   end
 
-  context 'when request is un-signed' do
+  context 'when request is unsigned' do
     it 'returns an unauthorized status code' do
       get '/'
       expect(last_response.status).to eq(401)
@@ -134,8 +134,8 @@ RSpec.describe "Integration test" do
   context 'when request is signed with the correct key_id' do
     let(:key_id) { 'client_a' }
 
-    it 'request is signed and verfied successfully' do
-      body = {"first_name" => "Bob", "last_name" => "Hawk"}
+    it 'request is signed and verified successfully' do
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
 
       jwt_token = JWTSignedRequest.sign(
         method: 'POST',

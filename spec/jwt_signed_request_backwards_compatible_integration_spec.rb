@@ -27,7 +27,7 @@ RSpec.describe "Integration test" do
     end
   end
 
-  context 'when request is un-signed' do
+  context 'when request is unsigned' do
     it 'receives an unauthorized status code' do
       get '/'
       expect(last_response.status).to eq(401)
@@ -71,8 +71,8 @@ RSpec.describe "Integration test" do
       pem
     end
 
-    it 'request is signed and verfied successfully' do
-      body = {"first_name" => "Bob", "last_name" => "Hawk"}
+    it 'request is signed and verified successfully' do
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
 
       jwt_token = JWTSignedRequest.sign(
         method: 'POST',
@@ -88,7 +88,7 @@ RSpec.describe "Integration test" do
     end
 
     context 'with query parameters in the path' do
-      it 'request is signed and verfied successfully' do
+      it 'request is signed and verified successfully' do
         jwt_token = JWTSignedRequest.sign(
           method: 'GET',
           path: '/?foo=bar&baz=quz',
