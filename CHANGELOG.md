@@ -18,3 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Changed API so users can instead provide a `key_id` when signing requests
 - With requestes signed with a `key_id`, there is no need to provide a `secret_key` when verifying requests.
 - Backwards compability with version 1.x.x
+
+## [v2.1.0] - 2017-08-31
+### Changed
+- Check `PATH_INFO` instead of `REQUEST_PATH` when performing path exclusion
