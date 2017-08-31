@@ -37,7 +37,7 @@ module JWTSignedRequest
 
       def excluded_path?(env)
         !exclude_paths.nil? &&
-          env['REQUEST_PATH'].match(exclude_paths)
+          env['PATH_INFO'].match(exclude_paths)
       end
     end
   end

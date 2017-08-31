@@ -14,7 +14,6 @@ module JWTSignedRequest
         "rack.multiprocess"=>false,
         "rack.run_once"=>false,
         "REQUEST_METHOD"=>"POST",
-        "REQUEST_PATH"=>"/api/endpoint",
         "PATH_INFO"=>"/api/endpoint",
         "REQUEST_URI"=>"/api/endpoint",
         "CONTENT_TYPE"=>"application/json",
@@ -43,7 +42,7 @@ module JWTSignedRequest
     let(:jwt_token) { 'potato' }
 
     let(:method) { request_env['REQUEST_METHOD'] }
-    let(:path) { request_env['REQUEST_PATH'] }
+    let(:path) { request_env['PATH_INFO'] }
     let(:body) { request_env['rack.input'] }
     let(:body_sha) { Digest::SHA256.hexdigest(body.string) }
     let(:headers) { JSON.dump('content-type' => 'application/json') }
