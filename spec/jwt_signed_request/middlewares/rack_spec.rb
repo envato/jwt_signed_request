@@ -43,7 +43,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     context 'and request path is not excluded' do
       let(:env) do
         {
-          'REQUEST_PATH' => '/verify'
+          'PATH_INFO' => '/verify'
         }
       end
 
@@ -56,7 +56,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     context 'and request path is excluded' do
       let(:env) do
         {
-          'REQUEST_PATH' => '/health'
+          'PATH_INFO' => '/health'
         }
       end
 
