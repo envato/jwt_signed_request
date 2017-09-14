@@ -30,4 +30,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.1.2] - 2017-09-15
 ### Changed
 - Pass ownership to rubygems@envato.com
-- Add contributers to README
+- Add contributors to README
