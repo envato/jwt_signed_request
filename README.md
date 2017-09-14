@@ -181,6 +181,20 @@ details.
 We welcome contribution from everyone. Read more about it in
 [`CODE_OF_CONDUCT.md`](https://github.com/envato/jwt_signed_request/blob/master/CODE_OF_CONDUCT.md)
 
+## Contributers
+
+Many thanks to the following contributers to this gem:
+
+- Toan Nguyen - [@yoshdog](https://github.com/yoshdog)
+- Odin Dutton - [@twe4ked](https://github.com/twe4ked)
+- Sebastian von Conrad - [@vonconrad](https://github.com/vonconrad)
+- Zubin Henner- [@zubin](https://github.com/zubin)
+- Glen Tweedie - [@nocache](https://github.com/nocache)
+- Giancarlo Salamanca - [@giancarlo](https://github.com/giancarlo)
+- Ben Axnick - [@bentheax](https://github.com/bentheax)
+- Glen Stampoultzis - [@gstamp](https://github.com/gstamp)
+- Lucas Parry - [@lparry](https://github.com/lparry)
+
 ## Contributing
 
 For bug fixes, documentation changes, and small features:

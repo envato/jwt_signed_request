@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.name          = "jwt_signed_request"
   spec.version       = JWTSignedRequest::VERSION
 
-  spec.authors       = ["Toan Nguyen"]
-  spec.email         = ["toan.nguyen@envato.com"]
+  spec.authors       = ["Envato"]
+  spec.email         = ["rubygems@envato.com"]
 
   spec.summary       = %q{JWT request signing and verification for Internal APIs}
   spec.description   = %q{}
