@@ -168,7 +168,7 @@ Please note that the way we sign and verify requests has changed in version 2.x.
 We are only supporting the old API for the next couple of releases of version 2.x.x so please upgrade ASAP.
 
 ## Maintainers
-- [Toan Nguyen](https://github.com/yoshdog)
+- [Envato](https://github.com/envato)
 
 ## License
 
