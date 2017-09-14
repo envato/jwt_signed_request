@@ -168,7 +168,7 @@ Please note that the way we sign and verify requests has changed in version 2.x.
 We are only supporting the old API for the next couple of releases of version 2.x.x so please upgrade ASAP.
 
 ## Maintainers
-- [Toan Nguyen](https://github.com/yoshdog)
+- [Envato](https://github.com/envato)
 
 ## License
 
@@ -180,6 +180,20 @@ details.
 
 We welcome contribution from everyone. Read more about it in
 [`CODE_OF_CONDUCT.md`](https://github.com/envato/jwt_signed_request/blob/master/CODE_OF_CONDUCT.md)
+
+## Contributors
+
+Many thanks to the following contributors to this gem:
+
+- Toan Nguyen - [@yoshdog](https://github.com/yoshdog)
+- Odin Dutton - [@twe4ked](https://github.com/twe4ked)
+- Sebastian von Conrad - [@vonconrad](https://github.com/vonconrad)
+- Zubin Henner- [@zubin](https://github.com/zubin)
+- Glen Tweedie - [@nocache](https://github.com/nocache)
+- Giancarlo Salamanca - [@salamagd](https://github.com/salamagd)
+- Ben Axnick - [@bentheax](https://github.com/bentheax)
+- Glen Stampoultzis - [@gstamp](https://github.com/gstamp)
+- Lucas Parry - [@lparry](https://github.com/lparry)
 
 ## Contributing
 

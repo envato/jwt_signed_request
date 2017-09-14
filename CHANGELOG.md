@@ -26,3 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.1.1] - 2017-09-14
 ### Changed
 - Pin `jwt` gem dependency to version `1.5.x`, as the recent 2.0.0 release is currently incompatible with `jwt_signed_request`
+
+## [v2.1.2] - 2017-09-15
+### Changed
+- Pass ownership to rubygems@envato.com
+- Add contributors to README
