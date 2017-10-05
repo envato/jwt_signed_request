@@ -59,11 +59,11 @@ RSpec.describe "Integration test" do
     let(:key_id) { 'unknown' }
 
     it 'returns an unauthorized status code' do
-      incorrect_private_key = <<-pem.gsub(/^\s+/, "")
+      correct_private_key = <<-pem.gsub(/^\s+/, "")
         -----BEGIN EC PRIVATE KEY-----
-        MHcCAQEEIO4uHlYp5qN6bMJTpwrkXVZkLNMLDrgay5wJGJvE/dCwoAoGCCqGSM49
-        AwEHoUQDQgAEUUDX/9UmvQH1312oPBVjrmF0DzfCcLVVsGFAmyPgHiQuM+lj/I4w
-        hPUBUQdavy12vg6VqMra1Hps7acm5ZcZ0A==
+        MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
+        AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
+        3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
         -----END EC PRIVATE KEY-----
       pem
 
@@ -75,7 +75,7 @@ RSpec.describe "Integration test" do
         body: body,
         headers: {'Content-Type' => 'application/json'},
         key_id: key_id,
-        secret_key: OpenSSL::PKey::EC.new(incorrect_private_key),
+        secret_key: OpenSSL::PKey::EC.new(correct_private_key),
       )
 
       post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
