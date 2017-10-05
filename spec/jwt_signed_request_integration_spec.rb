@@ -10,12 +10,12 @@ RSpec.describe "Integration test" do
 
   before(:all) do
     private_key = <<-pem.gsub(/^\s+/, "")
-        -----BEGIN EC PRIVATE KEY-----
-        MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
-        AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
-        3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
-        -----END EC PRIVATE KEY-----
-      pem
+      -----BEGIN EC PRIVATE KEY-----
+      MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
+      AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
+      3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
+      -----END EC PRIVATE KEY-----
+    pem
 
     public_key = <<-pem.gsub(/^\s+/, "")
       -----BEGIN PUBLIC KEY-----
