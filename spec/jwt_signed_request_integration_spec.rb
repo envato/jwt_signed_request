@@ -5,6 +5,7 @@ require 'jwt_signed_request'
 
 RSpec.describe "Integration test" do
   include Rack::Test::Methods
+
   let(:key_id) { 'client_a' }
 
   before(:all) do
