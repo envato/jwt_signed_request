@@ -67,7 +67,7 @@ RSpec.describe "Integration test" do
         -----END EC PRIVATE KEY-----
       pem
 
-      body = {"first_name" => "Bob", "last_name" => "Hawk"}
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
 
       jwt_token = JWTSignedRequest.sign(
         method: 'POST',
@@ -95,7 +95,7 @@ RSpec.describe "Integration test" do
         -----END EC PRIVATE KEY-----
       pem
 
-      body = {"first_name" => "Bob", "last_name" => "Hawk"}
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
 
       jwt_token = JWTSignedRequest.sign(
         method: 'POST',
@@ -115,7 +115,7 @@ RSpec.describe "Integration test" do
     let(:key_id) { 'client_a' }
 
     it 'returns an unauthorized status code' do
-      body = {"first_name" => "Bob", "last_name" => "Hawk"}
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
 
       jwt_token = JWTSignedRequest.sign(
         method: 'POST',
