@@ -150,4 +150,42 @@ RSpec.describe "Integration test" do
       expect(last_response.status).to eq(200)
     end
   end
+
+  context 'with target_key_id specified' do
+    before do
+      private_key = <<-pem.gsub(/^\s+/, "")
+        -----BEGIN EC PRIVATE KEY-----
+        MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
+        AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
+        3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
+        -----END EC PRIVATE KEY-----
+      pem
+
+      JWTSignedRequest.configure_keys do |config|
+        config.add_signing_key(
+          key_id: 'server_a',
+          key: OpenSSL::PKey::EC.new(private_key),
+          algorithm: 'ES256',
+        )
+      end
+    end
+
+    it 'request is signed and verified successfully' do
+      body = {"first_name" => "Bob", "last_name" => "Hawke"}
+
+      jwt_token = JWTSignedRequest.sign(
+        method: 'POST',
+        path: '/',
+        body: body,
+        headers: {'Content-Type' => 'application/json'},
+        key_id: 'server_a',
+        target_key_id: 'client_a',
+      )
+      sent_key_id = ::JWT.decoded_segments(jwt_token, false).first.fetch('kid')
+
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      expect(last_response.status).to eq(200)
+      expect(sent_key_id).to eq('client_a')
+    end
+  end
 end
