@@ -86,7 +86,7 @@ req['Authorization'] = JWTSignedRequest.sign(
   headers: {"Content-Type" => "application/json"},
   body: "",
   key_id: 'my-key-id',                    # used for looking up key and kid header
-  target_key_id: 'my-alt-key-id',         # optionally override kid header value
+  lookup_key_id: 'my-alt-key-id',         # optionally override lookup key
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )

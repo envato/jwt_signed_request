@@ -151,7 +151,7 @@ RSpec.describe "Integration test" do
     end
   end
 
-  context 'with target_key_id specified' do
+  context 'with lookup_key_id specified' do
     before do
       private_key = <<-pem.gsub(/^\s+/, "")
         -----BEGIN EC PRIVATE KEY-----
@@ -178,8 +178,8 @@ RSpec.describe "Integration test" do
         path: '/',
         body: body,
         headers: {'Content-Type' => 'application/json'},
-        key_id: 'server_a',
-        target_key_id: 'client_a',
+        key_id: 'client_a',
+        lookup_key_id: 'server_a',
       )
       sent_key_id = ::JWT.decoded_segments(jwt_token, false).first.fetch('kid')
 
