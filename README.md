@@ -190,7 +190,7 @@ Many thanks to the following contributors to this gem:
 - Odin Dutton - [@twe4ked](https://github.com/twe4ked)
 - Sebastian von Conrad - [@vonconrad](https://github.com/vonconrad)
 - Zubin Henner- [@zubin](https://github.com/zubin)
-- Glen Tweedie - [@nocache](https://github.com/nocache)
+- Glenn Tweedie - [@nocache](https://github.com/nocache)
 - Giancarlo Salamanca - [@salamagd](https://github.com/salamagd)
 - Ben Axnick - [@bentheax](https://github.com/bentheax)
 - Glen Stampoultzis - [@gstamp](https://github.com/gstamp)
