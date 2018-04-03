@@ -70,7 +70,8 @@ module JWTSignedRequest
 
     def verified_request?
       claims['method'].to_s.downcase == request.request_method.downcase &&
-        claims['path'] == request.fullpath &&
+        parsed_claims_path.path == request.path &&
+        verified_query_strings? &&
         claims['body_sha'] == Digest::SHA256.hexdigest(request_body) &&
         verified_headers?
     end
@@ -91,6 +92,26 @@ module JWTSignedRequest
       parsed_headers.all? do |header_key, header_value|
         Headers.fetch(header_key, request) == header_value
       end
+    end
+
+    def parsed_claims_path
+      @parsed_claims_path ||= URI.parse(claims['path'])
+    end
+
+    def standard_query_values(path)
+      URI.decode_www_form(path.query).sort if path && path.query
+    end
+
+    def verified_query_strings?
+      claims_query_values == request_query_values
+    end
+
+    def claims_query_values
+      standard_query_values parsed_claims_path
+    end
+
+    def request_query_values
+      standard_query_values URI.parse(request.fullpath)
     end
   end
 end
