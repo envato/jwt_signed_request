@@ -69,19 +69,25 @@ module JWTSignedRequest
 
     def verify_request!
       unless request.request_method.casecmp(claims['method'].to_s) == 0
-        raise RequestMethodVerificationFailedError, "Request failed method verification"
+        raise RequestMethodVerificationFailedError,
+          "Request failed method verification.\nexpected:#{claims['method']}\nreceived:#{request.request_method}"
       end
       unless parsed_claims_uri.path == request.path
-        raise RequestPathVerificationFailedError, "Request failed path verification"
+        raise RequestPathVerificationFailedError,
+          "Request failed path verification.\nexpected:#{parsed_claims_uri.path}\nreceived:#{request.path}"
       end
-      unless verified_query_strings?
-        raise RequestQueryVerificationFailedError, "Request failed query string verification"
+      unless claims_query_values == request_query_values
+        raise RequestQueryVerificationFailedError,
+          "Request failed query string verification.\nexpected:#{claims_query_values}\nreceived:#{request_query_values}"
       end
       unless claims['body_sha'] == Digest::SHA256.hexdigest(request_body)
-        raise RequestBodyVerificationFailedError, "Request failed body verification"
+        raise RequestBodyVerificationFailedError,
+          "Request failed body verification.\nexpected:#{claims['body_sha']}\
+          received:#{Digest::SHA256.hexdigest(request_body)}"
       end
       unless verified_headers?
-        raise RequestHeaderVerificationFailedError, "Request failed header verification"
+        raise RequestHeaderVerificationFailedError,
+          "Request failed header verification.\nexpected:#{claims['headers']}"
       end
     end
 
@@ -109,10 +115,6 @@ module JWTSignedRequest
 
     def standard_query_values(path)
       URI.decode_www_form(path.query).sort if path && path.query
-    end
-
-    def verified_query_strings?
-      claims_query_values == request_query_values
     end
 
     def claims_query_values
