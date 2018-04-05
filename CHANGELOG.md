@@ -31,3 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Pass ownership to rubygems@envato.com
 - Add contributors to README
+
+## [v2.2.0] - 2018-04-05
+### Changed
+- Sort query string parameters before comparing them
+- If request fails verification, raise error that indicates specifically what failed
