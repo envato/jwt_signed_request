@@ -107,11 +107,11 @@ module JWTSignedRequest
     end
 
     def claims_query_values
-      standard_query_values parsed_claims_path
+      standard_query_values(parsed_claims_path)
     end
 
     def request_query_values
-      standard_query_values URI.parse(request.fullpath)
+      standard_query_values(URI.parse(request.fullpath))
     end
   end
 end
