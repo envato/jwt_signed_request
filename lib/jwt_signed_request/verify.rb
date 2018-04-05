@@ -70,7 +70,7 @@ module JWTSignedRequest
 
     def verified_request?
       claims['method'].to_s.downcase == request.request_method.downcase &&
-        parsed_claims_path.path == request.path &&
+        parsed_claims_uri.path == request.path &&
         verified_query_strings? &&
         claims['body_sha'] == Digest::SHA256.hexdigest(request_body) &&
         verified_headers?
@@ -94,8 +94,8 @@ module JWTSignedRequest
       end
     end
 
-    def parsed_claims_path
-      @parsed_claims_path ||= URI.parse(claims['path'])
+    def parsed_claims_uri
+      @parsed_claims_uri ||= URI.parse(claims['path'])
     end
 
     def standard_query_values(path)
@@ -107,7 +107,7 @@ module JWTSignedRequest
     end
 
     def claims_query_values
-      standard_query_values(parsed_claims_path)
+      standard_query_values(parsed_claims_uri)
     end
 
     def request_query_values
