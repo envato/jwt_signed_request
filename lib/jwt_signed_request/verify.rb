@@ -1,4 +1,5 @@
 require 'jwt_signed_request/headers'
+require 'jwt_signed_request/errors'
 
 module JWTSignedRequest
   class Verify
@@ -20,9 +21,7 @@ module JWTSignedRequest
         raise MissingAuthorizationHeaderError, "Missing Authorization header in the request"
       end
 
-      unless verified_request?
-        raise RequestVerificationFailedError, "Request failed verification"
-      end
+      verify_request!
     end
 
     private
@@ -68,12 +67,22 @@ module JWTSignedRequest
       end
     end
 
-    def verified_request?
-      claims['method'].to_s.downcase == request.request_method.downcase &&
-        parsed_claims_uri.path == request.path &&
-        verified_query_strings? &&
-        claims['body_sha'] == Digest::SHA256.hexdigest(request_body) &&
-        verified_headers?
+    def verify_request!
+      unless request.request_method.casecmp(claims['method'].to_s) == 0
+        raise RequestMethodVerificationFailedError, "Request failed method verification"
+      end
+      unless parsed_claims_uri.path == request.path
+        raise RequestPathVerificationFailedError, "Request failed path verification"
+      end
+      unless verified_query_strings?
+        raise RequestQueryVerificationFailedError, "Request failed query string verification"
+      end
+      unless claims['body_sha'] == Digest::SHA256.hexdigest(request_body)
+        raise RequestBodyVerificationFailedError, "Request failed body verification"
+      end
+      unless verified_headers?
+        raise RequestHeaderVerificationFailedError, "Request failed header verification"
+      end
     end
 
     def request_body

@@ -84,24 +84,24 @@ module JWTSignedRequest
       context 'and the request method is different' do
         let(:method) { 'GET' }
 
-        it 'raises a RequestVerificationFailedError' do
-          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        it 'raises a RequestMethodVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
         end
       end
 
       context 'and there is no request method in the claims' do
         let(:method) { nil }
 
-        it 'raises a RequestVerificationFailedError' do
-          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        it 'raises a RequestMethodVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
         end
       end
 
       context 'and the request path is different' do
         let(:path) { '/api/different/endpoint'}
 
-        it 'raises a RequestVerificationFailedError' do
-          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        it 'raises a RequestPathVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestPathVerificationFailedError)
         end
       end
 
@@ -117,16 +117,16 @@ module JWTSignedRequest
       context 'and the body is different' do
         let(:body_sha) { '1ddfd12592f1090bb0f18a744abe97d07c7adacad3d3a27a9bfa927ff07f7b3c' }
 
-        it 'raises a RequestVerificationFailedError' do
-          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        it 'raises a RequestBodyVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestBodyVerificationFailedError)
         end
       end
 
       context 'and the request headers are different' do
         let(:headers) { JSON.dump('content-type' => 'application/xml') }
 
-        it 'raises a RequestVerificationFailedError' do
-          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestVerificationFailedError)
+        it 'raises a RequestHeaderVerificationFailedError' do
+          expect{ verify_request }.to raise_error(JWTSignedRequest::RequestHeaderVerificationFailedError)
         end
       end
 
