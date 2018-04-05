@@ -105,6 +105,15 @@ module JWTSignedRequest
         end
       end
 
+      context 'and the request query params are in a different order' do
+        before { request_env['QUERY_STRING'] = 'c=3&b=2&a=1' }
+        let(:path) { '/api/endpoint?a=1&b=2&c=3'}
+
+        it 'does not raise any errors' do
+          expect{ verify_request }.not_to raise_error
+        end
+      end
+
       context 'and the body is different' do
         let(:body_sha) { '1ddfd12592f1090bb0f18a744abe97d07c7adacad3d3a27a9bfa927ff07f7b3c' }
 
