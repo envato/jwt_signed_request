@@ -195,6 +195,7 @@ Many thanks to the following contributors to this gem:
 - Ben Axnick - [@bentheax](https://github.com/bentheax)
 - Glen Stampoultzis - [@gstamp](https://github.com/gstamp)
 - Lucas Parry - [@lparry](https://github.com/lparry)
+- Chris Mckenzie - [@chrisface](https://github.com/chrisface)
 
 ## Contributing
 
