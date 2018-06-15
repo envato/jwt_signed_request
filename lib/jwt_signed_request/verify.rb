@@ -29,7 +29,7 @@ module JWTSignedRequest
     attr_reader :request, :leeway
 
     def stored_key
-      jwt_header, _, _, _ = ::JWT.decoded_segments(jwt_token, false)
+      _body, jwt_header = ::JWT.decode(jwt_token, nil, false)
       key_id = jwt_header.fetch('kid') { raise MissingKeyIdError }
       signed_algorithm = jwt_header.fetch('alg')
       JWTSignedRequest.key_store.get_verification_key(key_id: key_id).tap do |key|
