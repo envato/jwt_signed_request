@@ -181,7 +181,8 @@ RSpec.describe "Integration test" do
         key_id: 'client_a',
         lookup_key_id: 'server_a',
       )
-      sent_key_id = ::JWT.decoded_segments(jwt_token, false).first.fetch('kid')
+      _body, jwt_header = ::JWT.decode(jwt_token, nil, false)
+      sent_key_id = jwt_header.fetch('kid')
 
       post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
       expect(last_response.status).to eq(200)

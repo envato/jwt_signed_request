@@ -40,6 +40,8 @@ module JWTSignedRequest
     let(:request) { Rack::Request.new(request_env) }
     let(:secret_key) { 'secret' }
     let(:jwt_token) { 'potato' }
+    let(:algorithm) { 'tomato' }
+    let(:kid) { 'apple'}
 
     let(:method) { request_env['REQUEST_METHOD'] }
     let(:path) { request_env['PATH_INFO'] }
@@ -48,7 +50,7 @@ module JWTSignedRequest
     let(:headers) { JSON.dump('content-type' => 'application/json') }
 
     subject(:verify_request) do
-      Verify.call(request: request, secret_key: secret_key)
+      Verify.call(request: request, secret_key: secret_key, algorithm: algorithm)
     end
 
     context 'when request has no Authorization header' do
@@ -63,12 +65,18 @@ module JWTSignedRequest
       end
 
       let(:claims) do
-        [{
-          'method' => method,
-          'path' => path,
-          'body_sha' => body_sha,
-          'headers' => headers,
-        }]
+        [
+          {
+            'method' => method,
+            'path' => path,
+            'body_sha' => body_sha,
+            'headers' => headers,
+          },
+          {
+            'alg' => algorithm,
+            'kid' => kid,
+          }
+        ]
       end
 
       before do
@@ -148,23 +156,59 @@ module JWTSignedRequest
 
       context 'and expiry leeway is provided' do
         subject(:verify_request) do
-          Verify.call(request: request, secret_key: secret_key, leeway: 123)
+          Verify.call(
+            request: request,
+            secret_key: secret_key,
+            algorithm: algorithm,
+            leeway: 123
+          )
         end
 
         it 'uses the specified leeway' do
           verify_request
-          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, leeway: 123)
+          expect(JWT).to have_received(:decode).with(
+            jwt_token, secret_key, true, leeway: 123, algorithm: algorithm
+          )
         end
       end
 
       context 'and expiry leeway is not provided' do
         subject(:verify_request) do
-          Verify.call(request: request, secret_key: secret_key)
+          Verify.call(request: request, secret_key: secret_key, algorithm: algorithm)
         end
 
         it 'does not pass the leeway with options' do
           verify_request
-          expect(JWT).to have_received(:decode).with(jwt_token, secret_key, true, {})
+          expect(JWT).to have_received(:decode).with(
+            jwt_token, secret_key, true, algorithm: algorithm
+          )
+        end
+      end
+
+      context 'and the jwt algorithm is not provided' do
+        let(:algorithm) { nil }
+        subject(:verify_request) do
+          Verify.call(request: request, secret_key: secret_key)
+        end
+
+        context 'and using JWT version 2.x.x' do
+          before do
+            stub_const("JWT::VERSION::MAJOR", 2)
+          end
+
+          it 'raises an a MissingAlgorithmError' do
+            expect { verify_request }.to raise_error(JWTSignedRequest::MissingAlgorithmError)
+          end
+        end
+
+        context 'and using JWT version 1.x.x' do
+          before do
+            stub_const("JWT::VERSION::MAJOR", 1)
+          end
+
+          it 'does not raise a MissingAlgorithmError' do
+            expect { verify_request }.to_not raise_error
+          end
         end
       end
 

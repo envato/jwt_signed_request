@@ -1,5 +1,6 @@
 require 'jwt_signed_request/headers'
 require 'jwt_signed_request/errors'
+require 'jwt/version'
 
 module JWTSignedRequest
   class Verify
@@ -39,6 +40,10 @@ module JWTSignedRequest
       end
     end
 
+    def algorithm
+      @algorithm ||= stored_key.fetch(:algorithm) { raise MissingAlgorithmError }
+    end
+
     def secret_key
       @secret_key ||= stored_key.fetch(:key) { raise MissingKeyIdError }
     end
@@ -51,6 +56,8 @@ module JWTSignedRequest
       @claims ||= begin
         verify = true
         options = {}
+
+        options[:algorithm] = algorithm if jwt_algorithm_required?
 
         if leeway
           # TODO: Once JWT v2.0.0 has been released, we should upgrade to it
@@ -123,6 +130,10 @@ module JWTSignedRequest
 
     def request_query_values
       standard_query_values(URI.parse(request.fullpath))
+    end
+
+    def jwt_algorithm_required?
+      JWT::VERSION::MAJOR >= 2
     end
   end
 end

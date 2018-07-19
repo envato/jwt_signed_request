@@ -11,6 +11,7 @@ module JWTSignedRequest
   RequestQueryVerificationFailedError = Class.new(RequestVerificationFailedError)
 
   MissingKeyIdError = Class.new(UnauthorizedRequestError)
+  MissingAlgorithmError = Class.new(UnauthorizedRequestError)
   UnknownKeyIdError = Class.new(UnauthorizedRequestError)
   AlgorithmMismatchError = Class.new(UnauthorizedRequestError)
 end
