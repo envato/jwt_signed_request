@@ -158,7 +158,8 @@ JWT tokens contain an expiry timestamp. If communication delays are large (or sy
 ```ruby
 class Server < Sinatra::Base
   use JWTSignedRequest::Middlewares::Rack,
-     exclude_paths: /public|health/              # optional regex
+     exclude_paths: /public|health/,          # optional regex
+     leeway: 100                              # optional
  end
 ```
 
