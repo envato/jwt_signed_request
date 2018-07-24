@@ -10,6 +10,7 @@ module JWTSignedRequest
         @app = app
         @secret_key = options[:secret_key]
         @algorithm = options[:algorithm]
+        @leeway = options[:leeway]
         @exclude_paths = options[:exclude_paths]
       end
 
@@ -19,7 +20,8 @@ module JWTSignedRequest
             args = {
               request: ::Rack::Request.new(env),
               secret_key: secret_key,
-              algorithm: algorithm
+              algorithm: algorithm,
+              leeway: leeway
             }.reject { |_, value| value.nil? }
 
             ::JWTSignedRequest.verify(**args)
@@ -33,7 +35,7 @@ module JWTSignedRequest
 
       private
 
-      attr_reader :app, :secret_key, :algorithm, :exclude_paths
+      attr_reader :app, :secret_key, :algorithm, :leeway, :exclude_paths
 
       def excluded_path?(env)
         !exclude_paths.nil? &&
