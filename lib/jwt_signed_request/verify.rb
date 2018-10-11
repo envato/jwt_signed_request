@@ -34,7 +34,8 @@ module JWTSignedRequest
       signed_algorithm = jwt_header.fetch('alg')
       JWTSignedRequest.key_store.get_verification_key(key_id: key_id).tap do |key|
         if signed_algorithm != key[:algorithm]
-          raise AlgorithmMismatchError
+          raise AlgorithmMismatchError, "The request is signed with #{signed_algorithm} "\
+            "while #{key[:algorithm]} is configured on key #{key_id}"
         end
       end
     end
