@@ -13,6 +13,12 @@ Gem::Specification.new do |spec|
   spec.description   = %q{}
   spec.homepage      = "https://github.com/envato/jwt_signed_request"
 
+  spec.metadata      = {
+                         'bug_tracker_uri'   => 'https://github.com/envato/jwt_signed_request/issues',
+                         'changelog_uri'     => 'https://github.com/envato/jwt_signed_request/blob/master/CHANGELOG.md',
+                         'source_code_uri'   => 'https://github.com/envato/jwt_signed_request',
+                       }
+
   spec.files         = Dir['README.md', 'lib/**/*']
   spec.bindir        = "bin"
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
