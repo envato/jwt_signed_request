@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JWTSignedRequest
   UnauthorizedRequestError = Class.new(StandardError)
   MissingAuthorizationHeaderError = Class.new(UnauthorizedRequestError)

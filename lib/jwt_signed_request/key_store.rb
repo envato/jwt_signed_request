@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JWTSignedRequest
   class KeyStore
     def initialize

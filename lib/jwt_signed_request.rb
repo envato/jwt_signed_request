@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt'
 require 'jwt_signed_request/key_store'
 require 'jwt_signed_request/sign'

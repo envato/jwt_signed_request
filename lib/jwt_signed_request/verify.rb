@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt_signed_request/headers'
 require 'jwt_signed_request/errors'
 require 'jwt/version'
