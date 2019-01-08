@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt_signed_request/claims'
 require 'timecop'
 

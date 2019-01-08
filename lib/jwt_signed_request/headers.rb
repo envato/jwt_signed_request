@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # We need a way to pull out the headers from a RAW Rack ENV hash.
 #
 # We took out the bits we need to lookup the headers from:

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt_signed_request/middlewares/rack'
 
 RSpec.describe JWTSignedRequest::Middlewares::Rack do
