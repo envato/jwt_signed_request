@@ -80,7 +80,7 @@ RSpec.describe "Integration test" do
         secret_key: OpenSSL::PKey::EC.new(correct_private_key),
       )
 
-      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}" }
       expect(last_response.status).to eq(401)
     end
   end
@@ -108,7 +108,7 @@ RSpec.describe "Integration test" do
         secret_key: OpenSSL::PKey::EC.new(incorrect_private_key),
       )
 
-      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}" }
       expect(last_response.status).to eq(401)
     end
   end
@@ -129,7 +129,7 @@ RSpec.describe "Integration test" do
         algorithm: 'HS512'
       )
 
-      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}" }
       expect(last_response.status).to eq(401)
     end
   end
@@ -148,7 +148,7 @@ RSpec.describe "Integration test" do
         key_id: key_id,
       )
 
-      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}" }
       expect(last_response.status).to eq(200)
     end
   end
@@ -186,7 +186,7 @@ RSpec.describe "Integration test" do
       _body, jwt_header = ::JWT.decode(jwt_token, nil, false)
       sent_key_id = jwt_header.fetch('kid')
 
-      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => jwt_token }
+      post '/', body, { 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}" }
       expect(last_response.status).to eq(200)
       expect(sent_key_id).to eq('client_a')
     end

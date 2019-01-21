@@ -63,7 +63,7 @@ module JWTSignedRequest
 
     context 'when there is an Authorization header set' do
       let(:request) do
-        Rack::Request.new(request_env.merge({'HTTP_AUTHORIZATION' => jwt_token}))
+        Rack::Request.new(request_env.merge({'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}"}))
       end
 
       let(:claims) do
@@ -86,6 +86,16 @@ module JWTSignedRequest
       end
 
       context 'and the request matches the JWT claims' do
+        it 'does not raise any errors' do
+          expect{ verify_request }.not_to raise_error
+        end
+      end
+
+      context 'and was signed with a missing authorization bearer token' do
+        let(:request) do
+          Rack::Request.new(request_env.merge({'HTTP_AUTHORIZATION' => jwt_token}))
+        end
+
         it 'does not raise any errors' do
           expect{ verify_request }.not_to raise_error
         end

@@ -20,7 +20,7 @@ module JWTSignedRequest
           **optional_settings
         )
 
-        env[:request_headers].store("Authorization", jwt_token)
+        env[:request_headers].store("Authorization", "Bearer #{jwt_token}")
         app.call(env)
       end
 
