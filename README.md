@@ -79,8 +79,7 @@ require 'jwt_signed_request'
 
 uri = URI('http://example.com')
 req = Net::HTTP::Get.new(uri)
-
-req['Authorization'] = JWTSignedRequest.sign(
+jwt_token = JWTSignedRequest.sign(
   method: req.method,
   path: req.path,
   headers: {"Content-Type" => "application/json"},
@@ -90,6 +89,8 @@ req['Authorization'] = JWTSignedRequest.sign(
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )
+
+req['Authorization'] = "Bearer #{jwt_token}"
 
 res = Net::HTTP.start(uri.hostname, uri.port) {|http|
   http.request(req)

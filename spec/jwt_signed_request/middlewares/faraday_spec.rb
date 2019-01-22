@@ -36,7 +36,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
   describe '#call' do
     it 'sets the jwt token in the Authorization Header' do
       response = middleware.call(env).env
-      expect(response[:request_headers]).to include('Authorization' => jwt_token)
+      expect(response[:request_headers]).to include('Authorization' => "Bearer #{jwt_token}")
     end
 
     context 'with optional settings' do
