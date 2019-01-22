@@ -91,7 +91,7 @@ module JWTSignedRequest
         end
       end
 
-      context 'and was signed with a missing authorization bearer token' do
+      context 'and signed without an authorization bearer syntax' do
         let(:request) do
           Rack::Request.new(request_env.merge({'HTTP_AUTHORIZATION' => jwt_token}))
         end
