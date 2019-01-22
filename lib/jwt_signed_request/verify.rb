@@ -50,7 +50,7 @@ module JWTSignedRequest
       @secret_key ||= stored_key.fetch(:key) { raise MissingKeyIdError }
     end
 
-    JWT_BEARER_REGEX = /\A(Bearer\s)?([^*]+)\z/
+    JWT_BEARER_REGEX = /\A(Bearer\s+)?([^*]+)\z/
 
     def jwt_token
       @jwt_token ||= Headers.fetch('Authorization', request) &&
