@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.5.0] - 2019-01-21
 
 ### Changed
+- Ensure we use the JWT Token in the Authorization header using the Bearer schema. We will still support Authorization headers without the Bearer schema
 
-- Ensure we use the JWT Token in the Authorization header using the Bearer schema. We will still support Authorization headers without the Bearer schema.
+### Breaking changes:
+- Requests signed using version 2.5.0 can only be successfully verified by version 2.5.0. This will be addressed in version 2.5.1. To ensure compatibility it is recommended to skip this version or update the version of your request verifying service prior to the request signing service
 
 ## [v2.4.1] - 2019-01-08
 ### Changed
