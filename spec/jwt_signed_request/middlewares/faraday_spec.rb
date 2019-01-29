@@ -51,7 +51,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
       it 'signs the request using the additional settings' do
         middleware.call(env).env
         expect(JWTSignedRequest).to have_received(:sign).with(
-          hash_including(key_id: 'my-key-id', issuer: 'my-issuer')
+          hash_including(secret_key: 'secret', key_id: 'my-key-id', issuer: 'my-issuer')
         )
       end
     end
