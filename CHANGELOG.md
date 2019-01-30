@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Added option `bearer_schema` to the Faraday middleware to allow the caller to specify whether to follow the Bearer schema when setting the JWT token in the Authorization request header (defaults to false)
+- Added option `bearer_schema` to the Faraday middleware to allow the caller to specify whether to follow the [Bearer schema](https://auth0.com/docs/jwt#how-do-json-web-tokens-work-) when setting the JWT token in the Authorization request header (defaults to false)
 
 ## [v2.5.0] - 2019-01-21
 
@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Ensure we use the JWT Token in the Authorization header using the Bearer schema. We will still support Authorization headers without the Bearer schema
 
-### Breaking changes:
+### Caveats
+
 - Requests signed using version 2.5.0 can only be successfully verified by version 2.5.0. This will be addressed in version 2.5.1. To ensure compatibility it is recommended to skip this version or update the version of your request verifying service prior to the request signing service
 
 ## [v2.4.1] - 2019-01-08
