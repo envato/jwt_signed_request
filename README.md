@@ -124,7 +124,7 @@ end
 
 ##### bearer_schema (boolean)
 
-Determines whether to use the Bearer schema when assigning the JWT token to the `Authorization` request header
+Determines whether to use the [Bearer schema](https://auth0.com/docs/jwt#how-do-json-web-tokens-work-) when assigning the JWT token to the `Authorization` request header
 
 | bearer_schema value | Authorization header value|
 |---------------------|---------------------------|
