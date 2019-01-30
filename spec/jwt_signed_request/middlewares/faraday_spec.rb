@@ -14,7 +14,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
     {
       method: 'POST',
       url: double(:request_uri => '/api/endpoint?offset=1&limit=10'),
-      body: "body",
+      body: 'body',
       request_headers: {
         'Content-Type' => 'application/json'
       }
@@ -34,25 +34,36 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
   end
 
   describe '#call' do
-    it 'sets the jwt token in the Authorization Header' do
-      response = middleware.call(env).env
-      expect(response[:request_headers]).to include('Authorization' => "Bearer #{jwt_token}")
+    let(:options) do
+      {
+        secret_key: 'secret',
+        key_id: 'my-key-id',
+        issuer: 'my-issuer'
+      }
     end
 
-    context 'with optional settings' do
+    it 'signs the request using the passed in options' do
+      middleware.call(env).env
+      expect(JWTSignedRequest).to have_received(:sign).with(
+        hash_including(secret_key: 'secret', key_id: 'my-key-id', issuer: 'my-issuer')
+      )
+    end
+
+    it 'sets the jwt token in the Authorization Header' do
+      response = middleware.call(env).env
+      expect(response[:request_headers]).to include('Authorization' => jwt_token)
+    end
+
+    context 'when bearer_schema is requested' do
       let(:options) do
         {
-          secret_key: 'secret',
-          key_id: 'my-key-id',
-          issuer: 'my-issuer'
+          bearer_schema: true
         }
       end
 
-      it 'signs the request using the additional settings' do
-        middleware.call(env).env
-        expect(JWTSignedRequest).to have_received(:sign).with(
-          hash_including(key_id: 'my-key-id', issuer: 'my-issuer')
-        )
+      it 'sets the jwt token in the Authorization Header with the Bearer schema' do
+        response = middleware.call(env).env
+        expect(response[:request_headers]).to include('Authorization' => "Bearer #{jwt_token}")
       end
     end
   end

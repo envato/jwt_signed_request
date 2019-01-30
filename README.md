@@ -108,7 +108,8 @@ conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
   faraday.use JWTSignedRequest::Middlewares::Faraday,
     key_id: 'my-key-id',
     issuer: 'my-issuer',                    # optional
-    additional_headers_to_sign: ['X-AUTH']  # optional
+    additional_headers_to_sign: ['X-AUTH'], # optional
+    bearer_schema: true                     # optional
 
   faraday.adapter Faraday.default_adapter
 end
@@ -118,6 +119,18 @@ conn.post do |req|
   req.body = '{ "name": "Unagi" }'
 end
 ```
+
+#### Additional options
+
+##### bearer_schema (boolean)
+
+Determines whether to use the [Bearer schema](https://auth0.com/docs/jwt#how-do-json-web-tokens-work-) when assigning the JWT token to the `Authorization` request header
+
+| bearer_schema value | Authorization header value|
+|---------------------|---------------------------|
+| false (default) | `<jwt_token>` |
+| true | `Bearer <jwt_token>` |
+
 
 ## Verifying Requests
 
