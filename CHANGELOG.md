@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.5.1] - 2019-01-29
 
 ### Changed
+
 - Added option `bearer_schema` to the Faraday middleware to allow the caller to specify whether to follow the Bearer schema when setting the JWT token in the Authorization request header (defaults to false)
 
 ## [v2.5.0] - 2019-01-21
