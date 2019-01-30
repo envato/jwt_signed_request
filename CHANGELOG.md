@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.5.0] - 2019-01-21
 
 ### Changed
+
 - Ensure we use the JWT Token in the Authorization header using the Bearer schema. We will still support Authorization headers without the Bearer schema
 
 ### Breaking changes:
