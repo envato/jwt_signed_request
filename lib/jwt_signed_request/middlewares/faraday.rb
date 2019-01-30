@@ -34,7 +34,7 @@ module JWTSignedRequest
       end
 
       def bearer_schema?
-        !!optional_settings[:bearer_schema]
+        options[:bearer_schema] == true
       end
 
       def optional_settings
@@ -44,7 +44,6 @@ module JWTSignedRequest
           additional_headers_to_sign: options[:additional_headers_to_sign],
           key_id:                     options[:key_id],
           issuer:                     options[:issuer],
-          bearer_schema:              options[:bearer_schema] || false,
         }.reject { |_, value| value.nil? }
       end
     end
