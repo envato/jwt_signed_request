@@ -19,7 +19,7 @@ $ bundle
 
 ## Generating EC Keys
 
-We should be using a public key encryption alogorithm such as **ES256**. To generate your public/private key pair using **ES256** run:
+We should be using a public key encryption algorithm such as **ES256**. To generate your public/private key pair using **ES256** run:
 
 ```sh
 $ openssl ecparam -genkey -name prime256v1 -noout -out myprivatekey.pem
