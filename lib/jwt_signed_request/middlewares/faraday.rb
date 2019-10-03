@@ -16,7 +16,7 @@ module JWTSignedRequest
           method:     env[:method],
           path:       env[:url].request_uri,
           headers:    env[:request_headers],
-          body:       env.fetch(:body, ::JWTSignedRequest::EMPTY_BODY),
+          body:       request_body(env),
           **optional_settings
         )
 
@@ -45,6 +45,12 @@ module JWTSignedRequest
           key_id:                     options[:key_id],
           issuer:                     options[:issuer],
         }.reject { |_, value| value.nil? }
+      end
+
+      def request_body(env)
+        return env[:body] unless env[:body].nil?
+
+        env[:body] = ::JWTSignedRequest::EMPTY_BODY
       end
     end
   end
