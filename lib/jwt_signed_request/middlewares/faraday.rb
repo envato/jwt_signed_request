@@ -44,6 +44,7 @@ module JWTSignedRequest
           additional_headers_to_sign: options[:additional_headers_to_sign],
           key_id:                     options[:key_id],
           issuer:                     options[:issuer],
+          subject:                    options[:subject],
         }.reject { |_, value| value.nil? }
       end
     end

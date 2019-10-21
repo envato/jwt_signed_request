@@ -10,13 +10,14 @@ module JWTSignedRequest
       new(**args).generate
     end
 
-    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, issuer:)
+    def initialize(method:, path:, headers:, body:, additional_headers_to_sign:, issuer:, subject:)
       @method = method
       @path = path
       @headers = headers || EMPTY_HEADERS
       @body = body
       @additional_headers_to_sign = additional_headers_to_sign || EMPTY_HEADERS
       @issuer = issuer
+      @subject = subject
     end
 
     private_class_method :new
@@ -30,12 +31,13 @@ module JWTSignedRequest
         exp: (Time.now + timeout).to_i
       }
       result[:iss] = issuer if issuer
+      result[:sub] = subject if subject
       result
     end
 
     private
 
-    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :issuer
+    attr_reader :method, :path, :headers, :body, :additional_headers_to_sign, :issuer, :subject
 
     HEADERS_TO_SIGN = %w(
       Content-Type

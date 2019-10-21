@@ -87,6 +87,7 @@ jwt_token = JWTSignedRequest.sign(
   key_id: 'my-key-id',                    # used for looking up key and kid header
   lookup_key_id: 'my-alt-key-id',         # optionally override lookup key
   issuer: 'my-issuer'                     # optional
+  subject: 'my-subject'                   # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )
 
@@ -108,6 +109,7 @@ conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
   faraday.use JWTSignedRequest::Middlewares::Faraday,
     key_id: 'my-key-id',
     issuer: 'my-issuer',                    # optional
+    subject: 'my-subject'                   # optional
     additional_headers_to_sign: ['X-AUTH'], # optional
     bearer_schema: true                     # optional
 

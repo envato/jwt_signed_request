@@ -57,7 +57,8 @@ module JWTSignedRequest
           headers: headers,
           body: body,
           additional_headers_to_sign: nil,
-          issuer: nil
+          issuer: nil,
+          subject: nil
         )
       end
 
@@ -114,7 +115,8 @@ module JWTSignedRequest
           headers: headers,
           body: body,
           additional_headers_to_sign: additional_headers_to_sign,
-          issuer: nil
+          issuer: nil,
+          subject: nil
         )
       end
     end
@@ -136,7 +138,30 @@ module JWTSignedRequest
         headers: headers,
         body: body,
         additional_headers_to_sign: nil,
-        issuer: 'the-issuer'
+        issuer: 'the-issuer',
+        subject: nil
+      )
+    end
+
+    it 'generates a claim using the request including a subject' do
+      Sign.call(
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        secret_key: secret_key,
+        key_id: 'my-key-id',
+        subject: 'the-subject'
+      )
+
+      expect(JWTSignedRequest::Claims).to have_received(:generate).with(
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        additional_headers_to_sign: nil,
+        issuer: nil,
+        subject: 'the-subject'
       )
     end
   end

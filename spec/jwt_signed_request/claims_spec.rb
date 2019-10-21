@@ -19,6 +19,7 @@ RSpec.describe JWTSignedRequest::Claims do
 
   describe '.generate' do
     let(:issuer) { nil }
+    let(:sub) { nil }
 
     subject(:claims) do
       described_class.generate(
@@ -28,6 +29,7 @@ RSpec.describe JWTSignedRequest::Claims do
         body: body,
         additional_headers_to_sign: additional_headers_to_sign,
         issuer: issuer,
+        subject: sub,
       )
     end
 
@@ -73,11 +75,23 @@ RSpec.describe JWTSignedRequest::Claims do
       expect(claims.keys).not_to include(:iss)
     end
 
+    it 'omits the subject' do
+      expect(claims.keys).not_to include(:sub)
+    end
+
     context 'when an issuer is supplied' do
       let(:issuer) { 'my-issuer' }
 
       it 'includes the issuer' do
         expect(claims).to include(iss: 'my-issuer')
+      end
+    end
+
+    context 'when a subject is supplied' do
+      let(:sub) { 'my-subject' }
+
+      it 'includes the subject' do
+        expect(claims).to include(sub: 'my-subject')
       end
     end
 
@@ -89,6 +103,7 @@ RSpec.describe JWTSignedRequest::Claims do
           headers: headers,
           body: body,
           issuer: nil,
+          subject: nil,
           additional_headers_to_sign: nil,
         )
       end
