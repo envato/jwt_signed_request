@@ -11,14 +11,14 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
   end
 
   let(:env) do
-    {
+    Faraday::Env.from(
       method: 'POST',
       url: double(:request_uri => '/api/endpoint?offset=1&limit=10'),
       body: 'body',
       request_headers: {
         'Content-Type' => 'application/json'
       }
-    }
+    )
   end
 
   let(:jwt_token) { SecureRandom.hex }
@@ -52,6 +52,11 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
     it 'sets the jwt token in the Authorization Header' do
       response = middleware.call(env).env
       expect(response[:request_headers]).to include('Authorization' => jwt_token)
+    end
+
+    it 'does not empty request body' do
+      request_env = middleware.call(env).env
+      expect(request_env[:body]).to eq('body')
     end
 
     context 'when bearer_schema is requested' do

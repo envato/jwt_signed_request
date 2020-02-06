@@ -16,7 +16,7 @@ module JWTSignedRequest
           method:     env[:method],
           path:       env[:url].request_uri,
           headers:    env[:request_headers],
-          body:       env.fetch(:body, ::JWTSignedRequest::EMPTY_BODY),
+          body:       env[:body] || (env[:body] = ::JWTSignedRequest::EMPTY_BODY),
           **optional_settings
         )
 
