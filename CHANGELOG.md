@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.5.2] - 2020-02-06
+
+### Changed
+
+- Remove restriction on JWT version < 2.2
+
 ## [v2.5.1] - 2019-01-29
 
 ### Changed
