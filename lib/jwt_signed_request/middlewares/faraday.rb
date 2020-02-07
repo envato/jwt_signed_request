@@ -12,11 +12,13 @@ module JWTSignedRequest
       end
 
       def call(env)
+        env[:body] ||= ::JWTSignedRequest::EMPTY_BODY
+
         @jwt_token = ::JWTSignedRequest.sign(
           method:     env[:method],
           path:       env[:url].request_uri,
           headers:    env[:request_headers],
-          body:       env[:body] || (env[:body] = ::JWTSignedRequest::EMPTY_BODY),
+          body:       env[:body],
           **optional_settings
         )
 
