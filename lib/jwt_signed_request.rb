@@ -20,11 +20,11 @@ module JWTSignedRequest
     @key_store ||= KeyStore.new
   end
 
-  def sign(*args)
-    Sign.call(*args)
+  def sign(**args)
+    Sign.call(**args)
   end
 
-  def verify(*args)
-    Verify.call(*args)
+  def verify(**args)
+    Verify.call(**args)
   end
 end

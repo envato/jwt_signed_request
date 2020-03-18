@@ -4,8 +4,8 @@ require 'jwt_signed_request/claims'
 
 module JWTSignedRequest
   class Sign
-    def self.call(*args)
-      new(*args).call
+    def self.call(**args)
+      new(**args).call
     end
 
     def initialize(

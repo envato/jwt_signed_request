@@ -6,8 +6,8 @@ require 'jwt/version'
 
 module JWTSignedRequest
   class Verify
-    def self.call(*args)
-      new(*args).call
+    def self.call(**args)
+      new(**args).call
     end
 
     # TODO: secret_key & algorithm is deprecated and will be removed in future.
