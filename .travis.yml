@@ -3,6 +3,8 @@ rvm:
   - 2.3.0
   - 2.4.0
   - 2.5.0
+  - 2.6.0
+  - 2.7.0
 sudo: false
 script:
   - bundle exec rspec --color --format documentation
