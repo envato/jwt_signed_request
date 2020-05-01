@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.5.4] - 2020-05-01
+
+### Fixed
+
+- Resolved deprecation warnings on ruby 2.7
+
+### Changed
+
+- Run CI tests against more ruby versions (added 2.6 and 2.7)
+
 ## [v2.5.3] - 2020-02-07
 
 ### Fixed
