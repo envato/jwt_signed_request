@@ -4,10 +4,9 @@ require 'jwt_signed_request'
 require 'rack'
 
 RSpec.describe JWTSignedRequest::Verify do
-  subject(:verify_request) do
-    described_class.call(request: request, secret_key: secret_key, algorithm: algorithm)
-  end
+  subject(:verify_request) { described_class.call(**default_args) }
 
+  let(:default_args) { {request: request, secret_key: secret_key, algorithm: algorithm} }
   let(:request) { Rack::Request.new(request_env) }
   let(:secret_key) { 'secret' }
   let(:jwt_token) { 'potato' }
@@ -165,14 +164,7 @@ RSpec.describe JWTSignedRequest::Verify do
     end
 
     context 'and expiry leeway is provided' do
-      subject(:verify_request) do
-        described_class.call(
-          request: request,
-          secret_key: secret_key,
-          algorithm: algorithm,
-          leeway: 123,
-        )
-      end
+      subject(:verify_request) { described_class.call(**default_args, leeway: 123) }
 
       it 'uses the specified leeway' do
         verify_request
@@ -183,9 +175,7 @@ RSpec.describe JWTSignedRequest::Verify do
     end
 
     context 'and expiry leeway is not provided' do
-      subject(:verify_request) do
-        described_class.call(request: request, secret_key: secret_key, algorithm: algorithm)
-      end
+      subject(:verify_request) { described_class.call(request: request, secret_key: secret_key, algorithm: algorithm) }
 
       it 'does not pass the leeway with options' do
         verify_request
@@ -196,11 +186,9 @@ RSpec.describe JWTSignedRequest::Verify do
     end
 
     context 'and the jwt algorithm is not provided' do
-      let(:algorithm) { nil }
-      subject(:verify_request) do
-        described_class.call(request: request, secret_key: secret_key)
-      end
+      subject(:verify_request) { described_class.call(request: request, secret_key: secret_key) }
 
+      let(:algorithm) { nil }
       context 'and using JWT version 2.x.x' do
         before do
           stub_const("JWT::VERSION::MAJOR", 2)
