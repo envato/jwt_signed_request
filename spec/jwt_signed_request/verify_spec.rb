@@ -214,5 +214,14 @@ RSpec.describe JWTSignedRequest::Verify do
       verify_request
       expect(request.body.read).to eq 'data=body'
     end
+
+    context 'when secret key and algorithm are unspecified' do
+      subject(:verify_request) { described_class.call(request: request) }
+
+      it 'looks up key store' do
+        expect(JWTSignedRequest.key_store).to receive(:get_verification_key).and_return(double.as_null_object)
+        expect { verify_request }.to raise_error(JWTSignedRequest::UnauthorizedRequestError)
+      end
+    end
   end
 end
