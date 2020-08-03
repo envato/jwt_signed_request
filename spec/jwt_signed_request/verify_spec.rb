@@ -6,35 +6,34 @@ require 'rack'
 RSpec.describe JWTSignedRequest::Verify do
   let(:request_env) do
     {
-      "SERVER_SOFTWARE"=>"thin 1.4.1 codename Chromeo",
-      "SERVER_NAME"=>"localhost",
-      "rack.input"=>StringIO.new("data=body"),
-      "rack.version"=>[1, 0],
-      "rack.errors"=>"",
-      "rack.multithread"=>false,
-      "rack.multiprocess"=>false,
-      "rack.run_once"=>false,
-      "REQUEST_METHOD"=>"POST",
-      "PATH_INFO"=>"/api/endpoint",
-      "REQUEST_URI"=>"/api/endpoint",
-      "CONTENT_TYPE"=>"application/json",
-      "HTTP_VERSION"=>"HTTP/1.1",
-      "HTTP_HOST"=>"localhost:8080",
-      "HTTP_CONNECTION"=>"keep-alive",
-      "HTTP_ACCEPT"=>"*/*",
-      "HTTP_USER_AGENT"=>
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-        "HTTP_ACCEPT_ENCODING"=>"gzip,deflate,sdch",
-        "HTTP_ACCEPT_LANGUAGE"=>"en-US,en;q=0.8",
-        "HTTP_ACCEPT_CHARSET"=>"ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-        "HTTP_COOKIE"=> "_gauges_unique_year=1;  _gauges_unique_month=1",
-        "GATEWAY_INTERFACE"=>"CGI/1.2",
-        "SERVER_PORT"=>"8080",
-        "QUERY_STRING"=>"",
-        "SERVER_PROTOCOL"=>"HTTP/1.1",
-        "rack.url_scheme"=>"http",
-        "SCRIPT_NAME"=>"",
-        "REMOTE_ADDR"=>"127.0.0.1",
+      "SERVER_SOFTWARE" => "thin 1.4.1 codename Chromeo",
+      "SERVER_NAME" => "localhost",
+      "rack.input" => StringIO.new("data=body"),
+      "rack.version" => [1, 0],
+      "rack.errors" => "",
+      "rack.multithread" => false,
+      "rack.multiprocess" => false,
+      "rack.run_once" => false,
+      "REQUEST_METHOD" => "POST",
+      "PATH_INFO" => "/api/endpoint",
+      "REQUEST_URI" => "/api/endpoint",
+      "CONTENT_TYPE" => "application/json",
+      "HTTP_VERSION" => "HTTP/1.1",
+      "HTTP_HOST" => "localhost:8080",
+      "HTTP_CONNECTION" => "keep-alive",
+      "HTTP_ACCEPT" => "*/*",
+      "HTTP_USER_AGENT" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
+      "HTTP_ACCEPT_ENCODING" => "gzip,deflate,sdch",
+      "HTTP_ACCEPT_LANGUAGE" => "en-US,en;q=0.8",
+      "HTTP_ACCEPT_CHARSET" => "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+      "HTTP_COOKIE" => "_gauges_unique_year=1;  _gauges_unique_month=1",
+      "GATEWAY_INTERFACE" => "CGI/1.2",
+      "SERVER_PORT" => "8080",
+      "QUERY_STRING" => "",
+      "SERVER_PROTOCOL" => "HTTP/1.1",
+      "rack.url_scheme" => "http",
+      "SCRIPT_NAME" => "",
+      "REMOTE_ADDR" => "127.0.0.1",
     }
   end
 
@@ -42,7 +41,7 @@ RSpec.describe JWTSignedRequest::Verify do
   let(:secret_key) { 'secret' }
   let(:jwt_token) { 'potato' }
   let(:algorithm) { 'tomato' }
-  let(:kid) { 'apple'}
+  let(:kid) { 'apple' }
 
   let(:method) { request_env['REQUEST_METHOD'] }
   let(:path) { request_env['PATH_INFO'] }
@@ -56,7 +55,7 @@ RSpec.describe JWTSignedRequest::Verify do
 
   context 'when request has no Authorization header' do
     it 'raises a MissingAuthorizationHeaderError' do
-      expect{ verify_request }.to raise_error(JWTSignedRequest::MissingAuthorizationHeaderError)
+      expect { verify_request }.to raise_error(JWTSignedRequest::MissingAuthorizationHeaderError)
     end
   end
 
@@ -76,7 +75,7 @@ RSpec.describe JWTSignedRequest::Verify do
         {
           'alg' => algorithm,
           'kid' => kid,
-        }
+        },
       ]
     end
 
@@ -86,7 +85,7 @@ RSpec.describe JWTSignedRequest::Verify do
 
     context 'and the request matches the JWT claims' do
       it 'does not raise any errors' do
-        expect{ verify_request }.not_to raise_error
+        expect { verify_request }.not_to raise_error
       end
     end
 
@@ -96,7 +95,7 @@ RSpec.describe JWTSignedRequest::Verify do
       end
 
       it 'does not raise any errors' do
-        expect{ verify_request }.not_to raise_error
+        expect { verify_request }.not_to raise_error
       end
     end
 
@@ -104,7 +103,7 @@ RSpec.describe JWTSignedRequest::Verify do
       let(:method) { 'GET' }
 
       it 'raises a RequestMethodVerificationFailedError' do
-        expect{ verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
+        expect { verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
       end
     end
 
@@ -112,12 +111,12 @@ RSpec.describe JWTSignedRequest::Verify do
       let(:method) { nil }
 
       it 'raises a RequestMethodVerificationFailedError' do
-        expect{ verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
+        expect { verify_request }.to raise_error(JWTSignedRequest::RequestMethodVerificationFailedError)
       end
     end
 
     context 'and the request path is different' do
-      let(:path) { '/api/different/endpoint'}
+      let(:path) { '/api/different/endpoint' }
 
       it 'raises a RequestPathVerificationFailedError' do
         expect{ verify_request }.to raise_error(JWTSignedRequest::RequestPathVerificationFailedError)
@@ -126,10 +125,10 @@ RSpec.describe JWTSignedRequest::Verify do
 
     context 'and the request query params are in a different order' do
       before { request_env['QUERY_STRING'] = 'c=3&b=2&a=1' }
-      let(:path) { '/api/endpoint?a=1&b=2&c=3'}
+      let(:path) { '/api/endpoint?a=1&b=2&c=3' }
 
       it 'does not raise any errors' do
-        expect{ verify_request }.not_to raise_error
+        expect { verify_request }.not_to raise_error
       end
     end
 
@@ -137,7 +136,7 @@ RSpec.describe JWTSignedRequest::Verify do
       let(:body_sha) { '1ddfd12592f1090bb0f18a744abe97d07c7adacad3d3a27a9bfa927ff07f7b3c' }
 
       it 'raises a RequestBodyVerificationFailedError' do
-        expect{ verify_request }.to raise_error(JWTSignedRequest::RequestBodyVerificationFailedError)
+        expect { verify_request }.to raise_error(JWTSignedRequest::RequestBodyVerificationFailedError)
       end
     end
 
@@ -145,7 +144,7 @@ RSpec.describe JWTSignedRequest::Verify do
       let(:headers) { JSON.dump('content-type' => 'application/xml') }
 
       it 'raises a RequestHeaderVerificationFailedError' do
-        expect{ verify_request }.to raise_error(JWTSignedRequest::RequestHeaderVerificationFailedError)
+        expect { verify_request }.to raise_error(JWTSignedRequest::RequestHeaderVerificationFailedError)
       end
     end
 
@@ -171,7 +170,7 @@ RSpec.describe JWTSignedRequest::Verify do
           request: request,
           secret_key: secret_key,
           algorithm: algorithm,
-          leeway: 123
+          leeway: 123,
         )
       end
 
