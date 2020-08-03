@@ -11,7 +11,7 @@ module JWTSignedRequest
     end
 
     # TODO: secret_key & algorithm is deprecated and will be removed in future.
-    # For now we will support its functionaility
+    # For now we will support its functionality
     def initialize(request:, secret_key: nil, algorithm: nil, leeway: nil, key_store: JWTSignedRequest.key_store)
       @request = request
       @secret_key = secret_key
