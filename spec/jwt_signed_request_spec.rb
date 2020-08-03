@@ -3,6 +3,16 @@
 require 'jwt_signed_request'
 
 RSpec.describe JWTSignedRequest do
+  describe '.configure_keys' do
+    it 'adds verification keys to the default key store' do
+      key = double
+      expect(described_class.key_store).to receive(:add_verification_key).with(key)
+      described_class.configure_keys do |config|
+        config.add_verification_key(key)
+      end
+    end
+  end
+
   describe '.sign' do
     it 'calls the Sign class' do
       arguments = { arg: double }
