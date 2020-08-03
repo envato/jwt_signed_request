@@ -6,16 +6,16 @@ RSpec.describe JWTSignedRequest do
   describe '.sign' do
     it 'calls the Sign class' do
       arguments = { arg: double }
-      expect(JWTSignedRequest::Sign).to receive(:call).with(arguments)
-      JWTSignedRequest.sign(**arguments)
+      expect(described_class::Sign).to receive(:call).with(arguments)
+      described_class.sign(**arguments)
     end
   end
 
   describe '.verify' do
     it 'calls the Verify class' do
       arguments = { arg: double }
-      expect(JWTSignedRequest::Verify).to receive(:call).with(arguments)
-      JWTSignedRequest.verify(**arguments)
+      expect(described_class::Verify).to receive(:call).with(arguments)
+      described_class.verify(**arguments)
     end
   end
 end
