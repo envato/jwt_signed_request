@@ -8,19 +8,19 @@ module JWTSignedRequest
     end
 
     def add_signing_key(key_id:, key:, algorithm:)
-      @signing_keys.store(key_id,
-        {
-          key: key,
-          algorithm: algorithm
-        })
+      @signing_keys.store(
+        key_id,
+        key: key,
+        algorithm: algorithm,
+      )
     end
 
     def add_verification_key(key_id:, key:, algorithm:)
-      @verification_keys.store(key_id,
-        {
-          key: key,
-          algorithm: algorithm
-        })
+      @verification_keys.store(
+        key_id,
+        key: key,
+        algorithm: algorithm,
+      )
     end
 
     def get_signing_key(key_id:)

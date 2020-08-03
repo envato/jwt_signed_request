@@ -10,7 +10,7 @@ module JWTSignedRequest
   extend self
 
   DEFAULT_ALGORITHM = 'ES256'
-  EMPTY_BODY = ""
+  EMPTY_BODY = ''
 
   def configure_keys
     yield(key_store)
