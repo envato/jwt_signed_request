@@ -4,6 +4,22 @@ require 'jwt_signed_request'
 require 'rack'
 
 RSpec.describe JWTSignedRequest::Verify do
+  subject(:verify_request) do
+    described_class.call(request: request, secret_key: secret_key, algorithm: algorithm)
+  end
+
+  let(:request) { Rack::Request.new(request_env) }
+  let(:secret_key) { 'secret' }
+  let(:jwt_token) { 'potato' }
+  let(:algorithm) { 'tomato' }
+  let(:kid) { 'apple' }
+
+  let(:method) { request_env['REQUEST_METHOD'] }
+  let(:path) { request_env['PATH_INFO'] }
+  let(:body) { request_env['rack.input'] }
+  let(:body_sha) { Digest::SHA256.hexdigest(body.string) }
+  let(:headers) { JSON.dump('content-type' => 'application/json') }
+
   let(:request_env) do
     {
       "SERVER_SOFTWARE" => "thin 1.4.1 codename Chromeo",
@@ -35,22 +51,6 @@ RSpec.describe JWTSignedRequest::Verify do
       "SCRIPT_NAME" => "",
       "REMOTE_ADDR" => "127.0.0.1",
     }
-  end
-
-  let(:request) { Rack::Request.new(request_env) }
-  let(:secret_key) { 'secret' }
-  let(:jwt_token) { 'potato' }
-  let(:algorithm) { 'tomato' }
-  let(:kid) { 'apple' }
-
-  let(:method) { request_env['REQUEST_METHOD'] }
-  let(:path) { request_env['PATH_INFO'] }
-  let(:body) { request_env['rack.input'] }
-  let(:body_sha) { Digest::SHA256.hexdigest(body.string) }
-  let(:headers) { JSON.dump('content-type' => 'application/json') }
-
-  subject(:verify_request) do
-    described_class.call(request: request, secret_key: secret_key, algorithm: algorithm)
   end
 
   context 'when request has no Authorization header' do
