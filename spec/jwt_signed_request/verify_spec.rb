@@ -223,5 +223,15 @@ RSpec.describe JWTSignedRequest::Verify do
         expect { verify_request }.to raise_error(JWTSignedRequest::UnauthorizedRequestError)
       end
     end
+
+    context 'with custom key store' do
+      subject(:verify_request) { described_class.call(request: request, key_store: custom_key_store) }
+      let(:custom_key_store) { instance_double(JWTSignedRequest::KeyStore) }
+
+      it 'looks up custom key store' do
+        expect(custom_key_store).to receive(:get_verification_key).and_return(double.as_null_object)
+        expect { verify_request }.to raise_error(JWTSignedRequest::UnauthorizedRequestError)
+      end
+    end
   end
 end
