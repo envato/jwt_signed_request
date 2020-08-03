@@ -10,14 +10,21 @@ module JWTSignedRequest
   extend self
 
   DEFAULT_ALGORITHM = 'ES256'
+  DEFAULT_KEY_STORE_ID = '__default__'
   EMPTY_BODY = ''
+  private_constant :DEFAULT_KEY_STORE_ID
 
-  def configure_keys
+  def configure_keys(key_store_id = DEFAULT_KEY_STORE_ID)
+    key_store = key_stores[key_store_id]
     yield(key_store)
   end
 
   def key_store
-    @key_store ||= KeyStore.new
+    key_stores[DEFAULT_KEY_STORE_ID]
+  end
+
+  def key_stores
+    @key_stores ||= Hash.new { |result, key| result[key] = KeyStore.new }
   end
 
   def sign(**args)
