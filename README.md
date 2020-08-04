@@ -30,27 +30,57 @@ Store and encrypt these in your application secrets.
 
 ## Configuration
 
-You can add signing and verification keys to the key store as your application needs them.
+You can add signing and verification keys to one or more key stores as your application needs them.
+
+For example, given the following keys:
 
 ```ruby
-private_key = <<-pem.gsub(/^\s+/, "")
+private_key = <<-PEM.gsub(/^\s+/, "")
     -----BEGIN EC PRIVATE KEY-----
     MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
     AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
     3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
     -----END EC PRIVATE KEY-----
-  pem
+  PEM
 
-public_key = <<-pem.gsub(/^\s+/, "")
+public_key = <<-PEM.gsub(/^\s+/, "")
   -----BEGIN PUBLIC KEY-----
   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/O
   exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
   -----END PUBLIC KEY-----
-pem
+PEM
+```
 
+### Single key store
+
+If your application only needs a single key store, configure it like so:
+
+```ruby
 require 'openssl'
 
 JWTSignedRequest.configure_keys do |config|
+  config.add_signing_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(private_key),
+    algorithm: 'ES256',
+  )
+
+  config.add_verification_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(public_key),
+    algorithm: 'ES256',
+  )
+end
+```
+
+### Multiple key stores
+
+If your application requires multiple key stores, configure them like so:
+
+```ruby
+key_store_id = 'widget_admin'
+
+JWTSignedRequest.configure_keys(key_store_id) do |config|
   config.add_signing_key(
     key_id: 'client_a',
     key: OpenSSL::PKey::EC.new(private_key),
@@ -134,8 +164,9 @@ Determines whether to use the [Bearer schema](https://auth0.com/docs/jwt#how-do-
 
 ## Verifying Requests
 
-Please make sure you have added your verification keys to the key store. Doing so will allow the server to verify requests signed by different signing keys.
-
+Please make sure you have added your verification keys to the appropriate key
+store. Doing so will allow the server to verify requests signed by different
+signing keys.
 
 ## Using Rails
 
@@ -149,7 +180,11 @@ class APIController < ApplicationController
 
   def verify_request
     begin
-      JWTSignedRequest.verify(request: request)
+      JWTSignedRequest.verify(
+        request: request,
+        # Use optional `key_store_id` kwarg when working with multiple key stores, eg:
+        key_store_id: 'widget_admin',
+      )
 
     rescue JWTSignedRequest::UnauthorizedRequestError => e
       render :json => {}, :status => :unauthorized
