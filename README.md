@@ -143,6 +143,7 @@ conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
   faraday.use(
     JWTSignedRequest::Middlewares::Faraday,
       key_id: 'my-key-id',
+      key_store_id: 'my-key-store-id',        # optional
       issuer: 'my-issuer',                    # optional
       additional_headers_to_sign: ['X-AUTH'], # optional
       bearer_schema: true,                    # optional
@@ -217,6 +218,7 @@ class Server < Sinatra::Base
     JWTSignedRequest::Middlewares::Rack,
     exclude_paths: /public|health/,          # optional regex
     leeway: 100,                             # optional
+    key_store_id: 'my-key-store-id',         # optional
   )
  end
 ```
