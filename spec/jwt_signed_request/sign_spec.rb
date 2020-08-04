@@ -12,13 +12,13 @@ module JWTSignedRequest
 
     let(:body) { 'data' }
     let(:private_key) do
-      <<-pem.gsub(/^\s+/, "")
+      <<-PEM.gsub(/^\s+/, "")
         -----BEGIN EC PRIVATE KEY-----
         MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
         AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
         3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
         -----END EC PRIVATE KEY-----
-      pem
+      PEM
     end
 
     let(:secret_key) { OpenSSL::PKey::EC.new(private_key) }
