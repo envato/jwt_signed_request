@@ -12,12 +12,12 @@ module JWTSignedRequest
 
     # TODO: secret_key & algorithm is deprecated and will be removed in future.
     # For now we will support its functionality
-    def initialize(request:, secret_key: nil, algorithm: nil, leeway: nil, key_store: JWTSignedRequest.key_store)
+    def initialize(request:, secret_key: nil, algorithm: nil, leeway: nil, key_store_id: nil)
       @request = request
       @secret_key = secret_key
       @algorithm = algorithm
       @leeway = leeway
-      @key_store = key_store
+      @key_store_id = key_store_id
     end
 
     def call
@@ -30,7 +30,7 @@ module JWTSignedRequest
 
     private
 
-    attr_reader :request, :leeway, :key_store
+    attr_reader :request, :leeway, :key_store_id
 
     def stored_key
       _body, jwt_header = ::JWT.decode(jwt_token, nil, false)
@@ -41,6 +41,10 @@ module JWTSignedRequest
           raise AlgorithmMismatchError
         end
       end
+    end
+
+    def key_store
+      key_store_id.nil? ? JWTSignedRequest.key_store : JWTSignedRequest.key_store(key_store_id)
     end
 
     def algorithm
