@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.6.0] - 2020-08-05
+
+### Added
+
+- Support for multiple key stores
+
 ## [v2.5.4] - 2020-05-01
 
 ### Fixed
