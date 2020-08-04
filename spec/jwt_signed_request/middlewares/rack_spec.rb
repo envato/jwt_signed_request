@@ -4,10 +4,8 @@ require 'jwt_signed_request/middlewares/rack'
 
 RSpec.describe JWTSignedRequest::Middlewares::Rack do
   let(:app) { ->(env) { [200, env, "app"] } }
-  let :middleware do
-    JWTSignedRequest::Middlewares::Rack.new(app, secret_key: 'secret')
-  end
-  let(:env) { Hash.new }
+  let(:middleware) { JWTSignedRequest::Middlewares::Rack.new(app, secret_key: 'secret') }
+  let(:env) { {} }
 
   subject(:verify_request) { middleware.call(env) }
 
@@ -17,7 +15,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     end
 
     it 'returns an unauthorized status code' do
-      code, header, body = verify_request
+      code, _header, _body = verify_request
       expect(code).to eq(401)
     end
   end
@@ -28,7 +26,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     end
 
     it 'returns a 200 ok status code' do
-      code, header, body = verify_request
+      code, _header, _body = verify_request
       expect(code).to eq(200)
     end
   end
@@ -43,27 +41,19 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     end
 
     context 'and request path is not excluded' do
-      let(:env) do
-        {
-          'PATH_INFO' => '/verify'
-        }
-      end
+      let(:env) { {'PATH_INFO' => '/verify'} }
 
       it 'verifies the request' do
-        code, header, body = verify_request
+        verify_request
         expect(JWTSignedRequest).to have_received(:verify)
       end
     end
 
     context 'and request path is excluded' do
-      let(:env) do
-        {
-          'PATH_INFO' => '/health'
-        }
-      end
+      let(:env) { {'PATH_INFO' => '/health'} }
 
       it 'does not verify the request' do
-        code, header, body = verify_request
+        verify_request
         expect(JWTSignedRequest).not_to have_received(:verify)
       end
     end
