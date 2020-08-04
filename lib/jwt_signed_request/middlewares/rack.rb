@@ -8,31 +8,19 @@ module JWTSignedRequest
     class Rack
       UNAUTHORIZED_STATUS_CODE = 401
 
-      def initialize(app, options = {})
+      def initialize(app, secret_key: nil, algorithm: nil, leeway: nil, exclude_paths: nil)
         @app = app
-        @secret_key = options[:secret_key]
-        @algorithm = options[:algorithm]
-        @leeway = options[:leeway]
-        @exclude_paths = options[:exclude_paths]
+        @secret_key = secret_key
+        @algorithm = algorithm
+        @leeway = leeway
+        @exclude_paths = exclude_paths
       end
 
       def call(env)
-        begin
-          unless excluded_path?(env)
-            args = {
-              request: ::Rack::Request.new(env),
-              secret_key: secret_key,
-              algorithm: algorithm,
-              leeway: leeway
-            }.reject { |_, value| value.nil? }
-
-            ::JWTSignedRequest.verify(**args)
-          end
-
-          app.call(env)
-        rescue ::JWTSignedRequest::UnauthorizedRequestError => e
-          [UNAUTHORIZED_STATUS_CODE, {'Content-Type' => 'application/json'} , []]
-        end
+        ::JWTSignedRequest.verify(**verification_args(env)) unless excluded_path?(env)
+        app.call(env)
+      rescue ::JWTSignedRequest::UnauthorizedRequestError
+        [UNAUTHORIZED_STATUS_CODE, {'Content-Type' => 'application/json'}, []]
       end
 
       private
@@ -42,6 +30,15 @@ module JWTSignedRequest
       def excluded_path?(env)
         !exclude_paths.nil? &&
           env['PATH_INFO'].match(exclude_paths)
+      end
+
+      def verification_args(env)
+        {
+          request: ::Rack::Request.new(env),
+          secret_key: secret_key,
+          algorithm: algorithm,
+          leeway: leeway,
+        }
       end
     end
   end
