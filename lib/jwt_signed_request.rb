@@ -19,12 +19,8 @@ module JWTSignedRequest
     yield(key_store)
   end
 
-  def key_store
-    key_stores[DEFAULT_KEY_STORE_ID]
-  end
-
-  def key_stores
-    @key_stores ||= Hash.new { |result, key| result[key] = KeyStore.new }
+  def key_store(id = DEFAULT_KEY_STORE_ID)
+    key_stores[id]
   end
 
   def sign(**args)
@@ -33,5 +29,11 @@ module JWTSignedRequest
 
   def verify(**args)
     Verify.call(**args)
+  end
+
+  private
+
+  def key_stores
+    @key_stores ||= Hash.new { |result, key| result[key] = KeyStore.new }
   end
 end

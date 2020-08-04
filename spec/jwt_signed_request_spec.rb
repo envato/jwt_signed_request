@@ -14,7 +14,7 @@ RSpec.describe JWTSignedRequest do
 
     context 'with custom key store' do
       it 'adds verification keys to the custom key store' do
-        custom_key_store = described_class.key_stores['some key store ID']
+        custom_key_store = described_class.key_store('some key store ID')
         key = double
         expect(custom_key_store).to receive(:add_verification_key).with(key)
         described_class.configure_keys('some key store ID') do |config|
