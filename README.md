@@ -97,7 +97,11 @@ end
 
 ## Signing Requests
 
-If you have added your signing keys to the key store, you will only need to specify the `key_id` you are signing the requests with.
+If you have added your signing keys to a key store, you will only need to
+specify the `key_id` you are signing the requests with.
+
+If you are using multiple key stores, you will also need to pass the
+appropriate `key_store_id`.
 
 ### Using net/http
 
@@ -116,6 +120,7 @@ jwt_token = JWTSignedRequest.sign(
   body: "",
   key_id: 'my-key-id',                    # used for looking up key and kid header
   lookup_key_id: 'my-alt-key-id',         # optionally override lookup key
+  key_store_id: 'widget_admin',           # optionally specify custom key store ID
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )
