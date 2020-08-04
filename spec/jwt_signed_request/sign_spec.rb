@@ -3,7 +3,7 @@
 require 'jwt_signed_request'
 
 RSpec.describe JWTSignedRequest::Sign do
-  let(:method) { 'POST'}
+  let(:method) { 'POST' }
   let(:path) { '/api/endpoint' }
   let(:headers) { {'content-type' => 'application/json'} }
   let(:body) { 'data' }
@@ -36,7 +36,7 @@ RSpec.describe JWTSignedRequest::Sign do
         body: body,
         algorithm: algorithm,
         secret_key: secret_key,
-        key_id: 'my-key-id'
+        key_id: 'my-key-id',
       )
     end
 
@@ -49,7 +49,7 @@ RSpec.describe JWTSignedRequest::Sign do
         headers: headers,
         body: body,
         additional_headers_to_sign: nil,
-        issuer: nil
+        issuer: nil,
       )
     end
 
@@ -60,7 +60,7 @@ RSpec.describe JWTSignedRequest::Sign do
         claims,
         secret_key,
         algorithm,
-        kid: 'my-key-id'
+        kid: 'my-key-id',
       )
     end
   end
@@ -84,7 +84,7 @@ RSpec.describe JWTSignedRequest::Sign do
   end
 
   context 'when signing with additional headers' do
-    let(:additional_headers_to_sign) { %w(X-AUTH) }
+    let(:additional_headers_to_sign) { %w[X-AUTH] }
 
     subject(:signed_request) do
       described_class.call(
@@ -93,7 +93,7 @@ RSpec.describe JWTSignedRequest::Sign do
         headers: headers,
         body: body,
         secret_key: secret_key,
-        additional_headers_to_sign: additional_headers_to_sign
+        additional_headers_to_sign: additional_headers_to_sign,
       )
     end
 
@@ -106,7 +106,7 @@ RSpec.describe JWTSignedRequest::Sign do
         headers: headers,
         body: body,
         additional_headers_to_sign: additional_headers_to_sign,
-        issuer: nil
+        issuer: nil,
       )
     end
   end
@@ -119,7 +119,7 @@ RSpec.describe JWTSignedRequest::Sign do
       body: body,
       secret_key: secret_key,
       key_id: 'my-key-id',
-      issuer: 'the-issuer'
+      issuer: 'the-issuer',
     )
 
     expect(JWTSignedRequest::Claims).to have_received(:generate).with(
@@ -128,7 +128,7 @@ RSpec.describe JWTSignedRequest::Sign do
       headers: headers,
       body: body,
       additional_headers_to_sign: nil,
-      issuer: 'the-issuer'
+      issuer: 'the-issuer',
     )
   end
 end
