@@ -57,7 +57,7 @@ module JWTSignedRequest
     end
 
     def key_store
-      key_store_id.nil? ? JWTSignedRequest.key_store : JWTSignedRequest.key_store(key_store_id)
+      KeyStore.find(key_store_id)
     end
 
     def secret_key

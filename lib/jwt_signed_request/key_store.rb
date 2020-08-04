@@ -2,6 +2,10 @@
 
 module JWTSignedRequest
   class KeyStore
+    def self.find(id)
+      id.nil? ? JWTSignedRequest.key_store : JWTSignedRequest.key_store(id)
+    end
+
     def initialize
       @signing_keys = {}
       @verification_keys = {}
