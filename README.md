@@ -132,7 +132,7 @@ res = Net::HTTP.start(uri.hostname, uri.port) {|http|
 }
 ```
 
-### Using faraday
+### Using Faraday
 
 ```ruby
 require 'faraday'
@@ -140,11 +140,13 @@ require 'openssl'
 require 'jwt_signed_request/middlewares/faraday'
 
 conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
-  faraday.use JWTSignedRequest::Middlewares::Faraday,
-    key_id: 'my-key-id',
-    issuer: 'my-issuer',                    # optional
-    additional_headers_to_sign: ['X-AUTH'], # optional
-    bearer_schema: true                     # optional
+  faraday.use(
+    JWTSignedRequest::Middlewares::Faraday,
+      key_id: 'my-key-id',
+      issuer: 'my-issuer',                    # optional
+      additional_headers_to_sign: ['X-AUTH'], # optional
+      bearer_schema: true,                    # optional
+    )
 
   faraday.adapter Faraday.default_adapter
 end
@@ -211,9 +213,11 @@ JWT tokens contain an expiry timestamp. If communication delays are large (or sy
 
 ```ruby
 class Server < Sinatra::Base
-  use JWTSignedRequest::Middlewares::Rack,
-     exclude_paths: /public|health/,          # optional regex
-     leeway: 100                              # optional
+  use(
+    JWTSignedRequest::Middlewares::Rack,
+    exclude_paths: /public|health/,          # optional regex
+    leeway: 100,                             # optional
+  )
  end
 ```
 
