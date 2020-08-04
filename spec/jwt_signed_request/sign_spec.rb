@@ -131,4 +131,45 @@ RSpec.describe JWTSignedRequest::Sign do
       issuer: 'the-issuer',
     )
   end
+
+  context 'when configured with default key store' do
+    before do
+      JWTSignedRequest.configure_keys do |config|
+        config.add_signing_key(
+          key_id: 'my-key-id',
+          key: secret_key,
+          algorithm: 'ES256',
+        )
+      end
+    end
+
+    subject(:sign_request) do
+      described_class.call(
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        key_id: 'my-key-id',
+      )
+    end
+
+    it 'can sign requests without passing secret_key and algorithm', :aggregate_failures do
+      expect(JWTSignedRequest::Claims).to receive(:generate).with(
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        additional_headers_to_sign: nil,
+        issuer: nil,
+      )
+      expect(JWT).to receive(:encode).with(
+        claims,
+        secret_key,
+        'ES256',
+        kid: 'my-key-id',
+      )
+
+      sign_request
+    end
+  end
 end
