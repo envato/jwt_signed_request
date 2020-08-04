@@ -120,7 +120,7 @@ jwt_token = JWTSignedRequest.sign(
   body: "",
   key_id: 'my-key-id',                    # used for looking up key and kid header
   lookup_key_id: 'my-alt-key-id',         # optionally override lookup key
-  key_store_id: 'widget_admin',           # optionally specify custom key store ID
+  key_store_id: 'widget_admin',           # optionally specify named key store ID
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )

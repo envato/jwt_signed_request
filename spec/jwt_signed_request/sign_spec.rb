@@ -173,9 +173,9 @@ RSpec.describe JWTSignedRequest::Sign do
     end
   end
 
-  context 'when configured with custom key store' do
+  context 'when configured with named key store' do
     before do
-      JWTSignedRequest.configure_keys('custom-key-store') do |config|
+      JWTSignedRequest.configure_keys('named-key-store') do |config|
         config.add_signing_key(
           key_id: 'my-key-id',
           key: secret_key,
@@ -191,7 +191,7 @@ RSpec.describe JWTSignedRequest::Sign do
         headers: headers,
         body: body,
         key_id: 'my-key-id',
-        key_store_id: 'custom-key-store',
+        key_store_id: 'named-key-store',
       )
     end
 
