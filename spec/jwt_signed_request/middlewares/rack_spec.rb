@@ -31,6 +31,17 @@ RSpec.describe JWTSignedRequest::Middlewares::Rack do
     end
   end
 
+  context 'with named key store' do
+    let(:middleware) { JWTSignedRequest::Middlewares::Rack.new(app, key_store_id: 'my_key_store_id') }
+
+    it 'passes key store ID option' do
+      expect(JWTSignedRequest).to receive(:verify) do |args|
+        expect(args[:key_store_id]).to eq('my_key_store_id')
+      end
+      verify_request
+    end
+  end
+
   context 'when exclude_paths options is defined' do
     let :middleware do
       JWTSignedRequest::Middlewares::Rack.new(app, secret_key: 'secret', exclude_paths: /api|health/)

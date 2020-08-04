@@ -8,12 +8,13 @@ module JWTSignedRequest
     class Rack
       UNAUTHORIZED_STATUS_CODE = 401
 
-      def initialize(app, secret_key: nil, algorithm: nil, leeway: nil, exclude_paths: nil)
+      def initialize(app, secret_key: nil, algorithm: nil, leeway: nil, exclude_paths: nil, key_store_id: nil)
         @app = app
         @secret_key = secret_key
         @algorithm = algorithm
         @leeway = leeway
         @exclude_paths = exclude_paths
+        @key_store_id = key_store_id
       end
 
       def call(env)
@@ -25,7 +26,7 @@ module JWTSignedRequest
 
       private
 
-      attr_reader :app, :secret_key, :algorithm, :leeway, :exclude_paths
+      attr_reader :app, :secret_key, :algorithm, :leeway, :exclude_paths, :key_store_id
 
       def excluded_path?(env)
         !exclude_paths.nil? &&
@@ -38,6 +39,7 @@ module JWTSignedRequest
           secret_key: secret_key,
           algorithm: algorithm,
           leeway: leeway,
+          key_store_id: key_store_id,
         }
       end
     end
