@@ -10,17 +10,14 @@ module JWTSignedRequest
   extend self
 
   DEFAULT_ALGORITHM = 'ES256'
-  DEFAULT_KEY_STORE_ID = '__default__'
   EMPTY_BODY = ''
-  private_constant :DEFAULT_KEY_STORE_ID
 
-  def configure_keys(key_store_id = DEFAULT_KEY_STORE_ID)
-    key_store = key_stores[key_store_id]
-    yield(key_store)
+  def configure_keys(key_store_id = nil)
+    yield KeyStore.find(key_store_id)
   end
 
-  def key_store(id = DEFAULT_KEY_STORE_ID)
-    key_stores[id]
+  def key_store(id = nil)
+    KeyStore.find(id)
   end
 
   def sign(**args)
@@ -29,11 +26,5 @@ module JWTSignedRequest
 
   def verify(**args)
     Verify.call(**args)
-  end
-
-  private
-
-  def key_stores
-    @key_stores ||= Hash.new { |result, key| result[key] = KeyStore.new }
   end
 end

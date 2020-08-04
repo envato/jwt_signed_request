@@ -3,7 +3,11 @@
 module JWTSignedRequest
   class KeyStore
     def self.find(id)
-      id.nil? ? JWTSignedRequest.key_store : JWTSignedRequest.key_store(id)
+      all[id]
+    end
+
+    private_class_method def self.all
+      @all ||= Hash.new { |result, key| result[key] = KeyStore.new }
     end
 
     def initialize
