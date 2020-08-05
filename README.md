@@ -30,24 +30,32 @@ Store and encrypt these in your application secrets.
 
 ## Configuration
 
-You can add signing and verification keys to the key store as your application needs them.
+You can add signing and verification keys to one or more key stores as your application needs them.
+
+For example, given the following keys:
 
 ```ruby
-private_key = <<-pem.gsub(/^\s+/, "")
+private_key = <<-PEM.gsub(/^\s+/, "")
     -----BEGIN EC PRIVATE KEY-----
     MHcCAQEEIBOQ3YIILYMV1glTKbF9oeZWzHe3SNQjAx4IbPIxNygQoAoGCCqGSM49
     AwEHoUQDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/OexDdlmXEjHYaixzYIduluGXd
     3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
     -----END EC PRIVATE KEY-----
-  pem
+  PEM
 
-public_key = <<-pem.gsub(/^\s+/, "")
+public_key = <<-PEM.gsub(/^\s+/, "")
   -----BEGIN PUBLIC KEY-----
   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuOC3ufTTnW0hVmCPNERb4LxaDE/O
   exDdlmXEjHYaixzYIduluGXd3cjg4H2gjqsY/NCpJ9nM8/AAINSrq+qPuA==
   -----END PUBLIC KEY-----
-pem
+PEM
+```
 
+### Single key store
+
+If your application only needs a single key store, configure it like so:
+
+```ruby
 require 'openssl'
 
 JWTSignedRequest.configure_keys do |config|
@@ -65,9 +73,35 @@ JWTSignedRequest.configure_keys do |config|
 end
 ```
 
+### Multiple key stores
+
+If your application requires multiple key stores, configure them like so:
+
+```ruby
+key_store_id = 'widget_admin'
+
+JWTSignedRequest.configure_keys(key_store_id) do |config|
+  config.add_signing_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(private_key),
+    algorithm: 'ES256',
+  )
+
+  config.add_verification_key(
+    key_id: 'client_a',
+    key: OpenSSL::PKey::EC.new(public_key),
+    algorithm: 'ES256',
+  )
+end
+```
+
 ## Signing Requests
 
-If you have added your signing keys to the key store, you will only need to specify the `key_id` you are signing the requests with.
+If you have added your signing keys to a key store, you will only need to
+specify the `key_id` you are signing the requests with.
+
+If you are using multiple key stores, you will also need to pass the
+appropriate `key_store_id`.
 
 ### Using net/http
 
@@ -86,6 +120,7 @@ jwt_token = JWTSignedRequest.sign(
   body: "",
   key_id: 'my-key-id',                    # used for looking up key and kid header
   lookup_key_id: 'my-alt-key-id',         # optionally override lookup key
+  key_store_id: 'widget_admin',           # optionally specify named key store ID
   issuer: 'my-issuer'                     # optional
   additional_headers_to_sign: ['X-AUTH']  # optional
 )
@@ -97,7 +132,7 @@ res = Net::HTTP.start(uri.hostname, uri.port) {|http|
 }
 ```
 
-### Using faraday
+### Using Faraday
 
 ```ruby
 require 'faraday'
@@ -105,11 +140,14 @@ require 'openssl'
 require 'jwt_signed_request/middlewares/faraday'
 
 conn = Faraday.new(url: URI.parse('http://example.com')) do |faraday|
-  faraday.use JWTSignedRequest::Middlewares::Faraday,
-    key_id: 'my-key-id',
-    issuer: 'my-issuer',                    # optional
-    additional_headers_to_sign: ['X-AUTH'], # optional
-    bearer_schema: true                     # optional
+  faraday.use(
+    JWTSignedRequest::Middlewares::Faraday,
+      key_id: 'my-key-id',
+      key_store_id: 'my-key-store-id',        # optional
+      issuer: 'my-issuer',                    # optional
+      additional_headers_to_sign: ['X-AUTH'], # optional
+      bearer_schema: true,                    # optional
+    )
 
   faraday.adapter Faraday.default_adapter
 end
@@ -134,8 +172,9 @@ Determines whether to use the [Bearer schema](https://auth0.com/docs/jwt#how-do-
 
 ## Verifying Requests
 
-Please make sure you have added your verification keys to the key store. Doing so will allow the server to verify requests signed by different signing keys.
-
+Please make sure you have added your verification keys to the appropriate key
+store. Doing so will allow the server to verify requests signed by different
+signing keys.
 
 ## Using Rails
 
@@ -149,7 +188,11 @@ class APIController < ApplicationController
 
   def verify_request
     begin
-      JWTSignedRequest.verify(request: request)
+      JWTSignedRequest.verify(
+        request: request,
+        # Use optional `key_store_id` kwarg when working with multiple key stores, eg:
+        key_store_id: 'widget_admin',
+      )
 
     rescue JWTSignedRequest::UnauthorizedRequestError => e
       render :json => {}, :status => :unauthorized
@@ -171,9 +214,12 @@ JWT tokens contain an expiry timestamp. If communication delays are large (or sy
 
 ```ruby
 class Server < Sinatra::Base
-  use JWTSignedRequest::Middlewares::Rack,
-     exclude_paths: /public|health/,          # optional regex
-     leeway: 100                              # optional
+  use(
+    JWTSignedRequest::Middlewares::Rack,
+    exclude_paths: /public|health/,          # optional regex
+    leeway: 100,                             # optional
+    key_store_id: 'my-key-store-id',         # optional
+  )
  end
 ```
 

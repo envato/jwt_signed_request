@@ -6,7 +6,8 @@ require 'jwt_signed_request'
 module JWTSignedRequest
   module Middlewares
     class Faraday < Faraday::Middleware
-      def initialize(app, options)
+      def initialize(app, bearer_schema: nil, **options)
+        @bearer_schema = bearer_schema
         @options = options
         super(app)
       end
@@ -19,7 +20,7 @@ module JWTSignedRequest
           path:       env[:url].request_uri,
           headers:    env[:request_headers],
           body:       env[:body],
-          **optional_settings
+          **options,
         )
 
         env[:request_headers].store("Authorization", authorization_header)
@@ -29,24 +30,14 @@ module JWTSignedRequest
 
       private
 
-      attr_reader :app, :env, :options, :jwt_token
+      attr_reader :app, :env, :bearer_schema, :options, :jwt_token
 
       def authorization_header
         bearer_schema? ? "Bearer #{jwt_token}" : jwt_token
       end
 
       def bearer_schema?
-        options[:bearer_schema] == true
-      end
-
-      def optional_settings
-        {
-          secret_key:                 options[:secret_key],
-          algorithm:                  options[:algorithm],
-          additional_headers_to_sign: options[:additional_headers_to_sign],
-          key_id:                     options[:key_id],
-          issuer:                     options[:issuer],
-        }.reject { |_, value| value.nil? }
+        bearer_schema == true
       end
     end
   end

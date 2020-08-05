@@ -9,15 +9,15 @@ require 'jwt_signed_request/errors'
 module JWTSignedRequest
   extend self
 
-  DEFAULT_ALGORITHM = 'ES256'.freeze
-  EMPTY_BODY = "".freeze
+  DEFAULT_ALGORITHM = 'ES256'
+  EMPTY_BODY = ''
 
-  def configure_keys
-    yield(key_store)
+  def configure_keys(key_store_id = nil)
+    yield KeyStore.find(key_store_id)
   end
 
-  def key_store
-    @key_store ||= KeyStore.new
+  def key_store(id = nil)
+    KeyStore.find(id)
   end
 
   def sign(**args)

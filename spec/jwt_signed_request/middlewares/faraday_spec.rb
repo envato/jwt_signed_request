@@ -38,15 +38,22 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
       {
         secret_key: 'secret',
         key_id: 'my-key-id',
-        issuer: 'my-issuer'
+        issuer: 'my-issuer',
+        key_store_id: 'my-key-store-id',
       }
     end
 
     it 'signs the request using the passed in options' do
       middleware.call(env).env
-      expect(JWTSignedRequest).to have_received(:sign).with(
-        hash_including(secret_key: 'secret', key_id: 'my-key-id', issuer: 'my-issuer')
-      )
+      expect(JWTSignedRequest).to have_received(:sign)
+        .with(
+          hash_including(
+            secret_key: 'secret',
+            key_id: 'my-key-id',
+            issuer: 'my-issuer',
+            key_store_id: 'my-key-store-id',
+          ),
+        )
     end
 
     it 'sets the jwt token in the Authorization Header' do
