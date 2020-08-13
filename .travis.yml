@@ -7,6 +7,8 @@ rvm:
   - 2.6
   - 2.7
 sudo: false
+before_install:
+  - gem install bundler
 script:
   - bundle exec appraisal install
   - bundle exec appraisal rspec
