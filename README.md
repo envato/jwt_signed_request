@@ -269,3 +269,33 @@ For bug fixes, documentation changes, and small features:
 5. Create a new Pull Request
 
 For larger new features: Do everything as above, but first also make contact with the project maintainers to be sure your change fits with the project direction and you won't be wasting effort going in the wrong direction
+
+### Compatibility
+
+Compatibility with multiple versions of the [JWT gem] is tested via the [appraisal gem].
+
+Configured versions are defined in [Appraisals](./Appraisals), which at time of writing looked like this:
+
+```ruby
+# Latest JWT minor versions
+# Source: https://rubygems.org/gems/jwt/versions
+%w[
+  1.5.6
+  2.0.0
+  2.1.0
+  2.2.1
+].each do |jwt_version|
+```
+
+Run the test suite like this:
+
+```sh
+# Test all configured versions
+bundle exec appraisal rspec
+
+# Target a specific configured version
+bundle exec appraisal jwt-1.5.6 rspec
+```
+
+[JWT gem]: https://github.com/jwt/ruby-jwt
+[appraisal gem]: https://github.com/thoughtbot/appraisal

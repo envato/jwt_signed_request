@@ -169,7 +169,10 @@ RSpec.describe JWTSignedRequest::Verify do
       it 'uses the specified leeway' do
         verify_request
         expect(JWT).to have_received(:decode).with(
-          jwt_token, secret_key, true, leeway: 123, algorithm: algorithm
+          jwt_token,
+          secret_key,
+          true,
+          a_hash_including(leeway: 123),
         )
       end
     end
@@ -180,7 +183,10 @@ RSpec.describe JWTSignedRequest::Verify do
       it 'does not pass the leeway with options' do
         verify_request
         expect(JWT).to have_received(:decode).with(
-          jwt_token, secret_key, true, algorithm: algorithm
+          jwt_token,
+          secret_key,
+          true,
+          hash_not_including(leeway: 123),
         )
       end
     end
