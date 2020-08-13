@@ -8,4 +8,5 @@ rvm:
   - 2.7
 sudo: false
 script:
-  - bundle exec rspec --color --format documentation
+  - bundle exec appraisal install
+  - bundle exec appraisal rspec
