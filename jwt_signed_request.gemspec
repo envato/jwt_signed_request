@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack'
 
   spec.add_development_dependency "appraisal"
-  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "bundler", ">= 2"
   spec.add_development_dependency "rack-test"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"

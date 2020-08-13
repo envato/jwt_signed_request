@@ -42,7 +42,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal
-  bundler
+  bundler (>= 2)
   faraday
   jwt (= 2.1.0)
   jwt_signed_request!
