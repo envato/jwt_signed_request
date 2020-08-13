@@ -172,8 +172,7 @@ RSpec.describe JWTSignedRequest::Verify do
           jwt_token,
           secret_key,
           true,
-          leeway: 123,
-          algorithm: algorithm,
+          a_hash_including(leeway: 123),
         )
       end
     end
@@ -187,7 +186,7 @@ RSpec.describe JWTSignedRequest::Verify do
           jwt_token,
           secret_key,
           true,
-          algorithm: algorithm,
+          hash_not_including(leeway: 123),
         )
       end
     end
