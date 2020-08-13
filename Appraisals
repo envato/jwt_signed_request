@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Latest JWT minor versions
+# Source: https://rubygems.org/gems/jwt/versions
 %w[
   1.5.6
   2.0.0
