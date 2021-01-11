@@ -12,3 +12,16 @@
     gem "jwt", jwt_version
   end
 end
+
+# Latest Faraday minor versions
+# Source: https://rubygems.org/gems/jwt/versions
+%w[
+  1.0.0
+  1.1.0
+  1.2.0
+  1.3.0
+].each do |faraday_version|
+  appraise "faraday-#{faraday_version}" do
+    gem "faraday", faraday_version, require: false
+  end
+end
