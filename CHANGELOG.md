@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v3.0.0] - 2021-01-12
+
+### Added
+
+- Added support for Faraday version >= 1.2.0
+
+### Changed
+
+- Removed support for Ruby 2.3
+
 ## [v2.6.0] - 2020-08-05
 
 ### Added
