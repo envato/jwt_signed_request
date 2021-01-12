@@ -14,7 +14,7 @@
 end
 
 # Latest Faraday minor versions
-# Source: https://rubygems.org/gems/jwt/versions
+# Source: https://rubygems.org/gems/faraday/versions
 %w[
   1.0.0
   1.1.0
