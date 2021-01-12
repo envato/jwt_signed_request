@@ -10,7 +10,7 @@ module JWTSignedRequest
         @bearer_schema = bearer_schema
         @options = options
 
-        super_requires_options? ? super(app, options) : super(app)
+        initializer_args_requires_options? ? super(app, options) : super(app)
       end
 
       def call(env)
@@ -41,7 +41,7 @@ module JWTSignedRequest
         bearer_schema == true
       end
 
-      def super_requires_options?
+      def initializer_args_requires_options?
         Gem::Version.new(::Faraday::VERSION) >= Gem::Version.new('1.2.0')
       end
     end
