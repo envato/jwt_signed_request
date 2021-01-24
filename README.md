@@ -1,5 +1,5 @@
 # JWT Signed Request
-[![travis ci build](https://api.travis-ci.org/envato/jwt_signed_request.svg)](https://travis-ci.org/envato/jwt_signed_request)
+[![Test Suite](https://github.com/envato/jwt_signed_request/workflows/tests/badge.svg?branch=master)](https://github.com/envato/jwt_signed_request/actions?query=branch%3Amaster+workflow%3Atests)
 
 Request signing and verification for Internal APIs using JWT.
 
