@@ -1,5 +1,9 @@
 # JWT Signed Request
-[![travis ci build](https://api.travis-ci.org/envato/jwt_signed_request.svg)](https://travis-ci.org/envato/jwt_signed_request)
+
+[![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/envato/jwt_signed_request/blob/master/LICENSE.txt)
+[![Gem Version](https://img.shields.io/gem/v/jwt_signed_request.svg?maxAge=2592000)](https://rubygems.org/gems/jwt_signed_request)
+[![Gem Downloads](https://img.shields.io/gem/dt/jwt_signed_request.svg?maxAge=2592000)](https://rubygems.org/gems/jwt_signed_request)
+[![Test Suite](https://github.com/envato/jwt_signed_request/workflows/tests/badge.svg?branch=master)](https://github.com/envato/jwt_signed_request/actions?query=branch%3Amaster+workflow%3Atests)
 
 Request signing and verification for Internal APIs using JWT.
 
