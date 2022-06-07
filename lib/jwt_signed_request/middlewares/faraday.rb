@@ -8,7 +8,6 @@ module JWTSignedRequest
     class Faraday < Faraday::Middleware
       def initialize(app, bearer_schema: nil, **kwargs)
         @bearer_schema = bearer_schema
-        # @options = options
         @kwargs = kwargs
 
         initializer_args_requires_options? ? super(app, kwargs) : super(app)
