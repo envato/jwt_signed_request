@@ -9,6 +9,9 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [ '2.4', '2.5', '2.6', '2.7', '3.0', '3.1' ]
+        gemfile: [ 'faraday_1.10.0', 'faraday_2.1.0', 'faraday_2.2.0', 'faraday_2.3.0', 'jwt_1.5.6', 'jwt_2.2.3', 'jwt_2.3.0', 'jwt_2.4.1' ]
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby ${{ matrix.ruby }}
@@ -17,6 +20,4 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - name: RSpec
-        run: |
-          bundle exec appraisal install
-          bundle exec appraisal rspec
+        run: bundle exec rspec
