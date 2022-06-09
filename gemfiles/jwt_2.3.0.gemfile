@@ -2,6 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "faraday", "1.1.0", require: false
+gem "faraday", require: false
+gem "jwt", "2.3.0"
 
 gemspec path: "../"
