@@ -3,7 +3,7 @@ name: tests
 on: [ push, pull_request ]
 jobs:
   test:
-    name: Test (Ruby ${{ matrix.ruby }})
+    name: Test (Ruby ${{ matrix.ruby }} on ${{ matrix.gemfile }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
