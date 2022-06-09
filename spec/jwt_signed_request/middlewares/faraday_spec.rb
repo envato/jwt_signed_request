@@ -26,7 +26,7 @@ RSpec.describe JWTSignedRequest::Middlewares::Faraday do
   let(:middleware) {
     described_class.new(lambda { |env|
       Faraday::Response.new(env)
-    }, options)
+    }, **options)
   }
 
   before do
