@@ -166,7 +166,7 @@ RSpec.describe JWTSignedRequest::Sign do
         claims,
         secret_key,
         'ES256',
-        kid: 'my-key-id',
+        { kid: 'my-key-id' },
       )
 
       sign_request
@@ -208,7 +208,7 @@ RSpec.describe JWTSignedRequest::Sign do
         claims,
         secret_key,
         'ES256',
-        kid: 'my-key-id',
+        { kid: 'my-key-id' },
       )
 
       sign_request
