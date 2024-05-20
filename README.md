@@ -21,6 +21,14 @@ then run:
 $ bundle
 ```
 
+## Stale PRs
+
+We use the "stale" workflow to manage our PRs.
+If you have a PR open for 60 days without any activity, it will automatically be labelled `stale-pr`.
+If there is no activity for 7 days after this label is applied, the PR will be automatically closed.
+
+If you have a PR that has a sensible reason for being open for a long period of time with no activity, you can apply the `do-not-auto-close` label to avoid it being automatically closed.
+
 ## Generating EC Keys
 
 We should be using a public key encryption algorithm such as **ES256**. To generate your public/private key pair using **ES256** run:

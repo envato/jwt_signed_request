@@ -1,0 +1,31 @@
+# This workflow warns and then closes PRs that have had no activity for a specified amount of time.
+#
+# You can adjust the behavior by modifying this file.
+# For more information, see:
+# https://github.com/actions/stale
+name: Label and close stale pull requests
+
+on:
+  schedule:
+  - cron: '0 0 * * *' # daily at midnight
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+    - uses: actions/stale@v5
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'This issue has had no activity for 60 days and is now considered stale. It will be closed in 7 days if there is no further activity.'
+        stale-issue-label: 'stale-issue'
+        stale-pr-message: 'This pull request has had no activity for 60 days and is now considered stale. It will be closed in 7 days if there is no further activity.'
+        stale-pr-label: 'stale-pr'
+        days-before-stale: 60
+        days-before-close: 7 # Will be closed 7 days after being labelled if there is no further activity in that time
+        exempt-issue-labels: 'do-not-auto-close' # allows us to allowlist issues that have a valid reason for no activity over a long period of time
+        exempt-pr-labels: 'do-not-auto-close' # allows us to allowlist PRs that have a valid reason for no activity over a long period of time
