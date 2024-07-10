@@ -9,8 +9,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Moved CI build to GitHub Actions ([#52]).
+- Updated test matrix to test against the following gem versions, any gem versions outside of this matrix are no longer fully supported ([#58]):
+  - `faraday`: `~> 1.10.0`, `~> 2.8.0`, `~> 2.9.0` & `~> 2.10.0`
+  - `jwt`: `~> 1.5.0`, `~> 2.6.0`, `~> 2.7.0` & `~> 2.8.0`
+  - `rack`: `~> 2.1.0`
+- Removed support for Ruby 2.4 & 2.5 ([#58])
+
+### Fixed
+
+- Compatibility with Rack 3+ ([#58])
 
 [#52]: https://github.com/envato/jwt_signed_request/pull/52
+[#58]: https://github.com/envato/jwt_signed_request/pull/58
 
 ## [v3.0.0] - 2021-01-12
 
