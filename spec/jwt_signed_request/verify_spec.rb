@@ -221,6 +221,21 @@ RSpec.describe JWTSignedRequest::Verify do
       expect(request.body.read).to eq 'data=body'
     end
 
+    context 'and the body has already been read' do
+      before do
+        body.read
+      end
+
+      it 'does not raise any errors' do
+        expect { verify_request }.not_to raise_error
+      end
+
+      it 'allows the body to be read' do
+        verify_request
+        expect(request.body.read).to eq 'data=body'
+      end
+    end
+
     context 'when secret key and algorithm are unspecified' do
       subject(:verify_request) { described_class.call(request: request) }
 

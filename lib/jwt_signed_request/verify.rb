@@ -109,6 +109,9 @@ module JWTSignedRequest
     end
 
     def request_body
+      return '' if request.body.nil?
+
+      request.body.rewind
       string = request.body.read
       request.body.rewind
       string
