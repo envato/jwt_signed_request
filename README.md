@@ -299,6 +299,12 @@ Configured versions are defined in [Appraisals](./Appraisals), which at time of 
 ].each do |jwt_version|
 ```
 
+Ensure you set up your local environment by running:
+
+```sh
+bundle exec appraisal install
+```
+
 Run the test suite like this:
 
 ```sh
