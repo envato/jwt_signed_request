@@ -22,6 +22,17 @@ end
   2.3.0
 ].each do |faraday_version|
   appraise "faraday-#{faraday_version}" do
-    gem "faraday", faraday_version, require: false
+  end
+end
+
+# Latest Rack minor versions
+# Source: https://rubygems.org/gems/rack/versions
+%w[
+  2.2.0
+  3.0.0
+  3.1.0
+].each do |rack_version|
+  appraise "rack-#{rack_version}" do
+    gem 'rack', "~> #{rack_version}"
   end
 end
