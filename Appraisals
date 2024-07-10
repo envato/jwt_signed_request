@@ -3,13 +3,13 @@
 # Latest JWT minor versions
 # Source: https://rubygems.org/gems/jwt/versions
 %w[
-  1.5.6
-  2.2.3
+  1.5.0
+  2.2.0
   2.3.0
-  2.4.1
+  2.4.0
 ].each do |jwt_version|
   appraise "jwt-#{jwt_version}" do
-    gem "jwt", jwt_version
+    gem 'jwt', "~> #{jwt_version}"
   end
 end
 
@@ -22,6 +22,7 @@ end
   2.3.0
 ].each do |faraday_version|
   appraise "faraday-#{faraday_version}" do
+    gem 'faraday', "~> #{faraday_version}", require: false
   end
 end
 
