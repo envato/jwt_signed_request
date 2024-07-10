@@ -3,6 +3,6 @@
 source "https://rubygems.org"
 
 gem "faraday", require: false
-gem "jwt", "1.5.6"
+gem "rack", "~> 2.2.0"
 
 gemspec path: "../"
