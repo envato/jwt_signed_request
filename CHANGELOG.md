@@ -14,12 +14,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `jwt`: `~> 1.5.0`, `~> 2.6.0`, `~> 2.7.0` & `~> 2.8.0`
   - `rack`: `~> 2.1.0`
 - Removed support for Ruby 2.4 & 2.5 ([#58])
+- Add Ruby 3.3 ([#56]), 3.2 ([#55]) to our test matrix
 
 ### Fixed
 
 - Compatibility with Rack 3+ ([#58])
 
 [#52]: https://github.com/envato/jwt_signed_request/pull/52
+[#55]: https://github.com/envato/jwt_signed_request/pull/55
+[#56]: https://github.com/envato/jwt_signed_request/pull/56
 [#58]: https://github.com/envato/jwt_signed_request/pull/58
 
 ## [v3.0.0] - 2021-01-12
