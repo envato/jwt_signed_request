@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [v4.1.0] - 2025-06-24
+
+### Added
+
+- Added support for additional JWT versions
+- Updated test matrix to include `jwt` versions: `~> 2.9.0`, `~> 2.10.0`, `~> 3.0.0` & `~> 3.1.0`
+- Added test coverage for JWT version 3+ behavior
+
+
 ## [v4.0.0] - 2024-07-11
 
 ### Changed
