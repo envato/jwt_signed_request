@@ -205,6 +205,16 @@ RSpec.describe JWTSignedRequest::Verify do
         end
       end
 
+      context 'and using JWT version 3.x.x' do
+        before do
+          stub_const("JWT::VERSION::MAJOR", 3)
+        end
+
+        it 'raises an a MissingAlgorithmError' do
+          expect { verify_request }.to raise_error(JWTSignedRequest::MissingAlgorithmError)
+        end
+      end
+
       context 'and using JWT version 1.x.x' do
         before do
           stub_const("JWT::VERSION::MAJOR", 1)
