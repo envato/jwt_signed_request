@@ -7,6 +7,10 @@
   2.6.0
   2.7.0
   2.8.0
+  2.9.0
+  2.10.0
+  3.0.0
+  3.1.0
 ].each do |jwt_version|
   appraise "jwt-#{jwt_version}" do
     gem 'jwt', "~> #{jwt_version}"
